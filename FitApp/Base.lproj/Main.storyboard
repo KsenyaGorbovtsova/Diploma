@@ -27,7 +27,7 @@
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="17" maxY="0.0"/>
                                         <state key="normal" title="Питание" image="nutrition_menu">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleColor" red="0.1803921568627451" green="0.80000000000000004" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="INW-eb-Jqx">
@@ -38,7 +38,7 @@
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
                                         <state key="normal" title="Замеры" image="measure_menu">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleColor" red="0.1803921568627451" green="0.80000000000000004" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fEH-eU-dBU">
@@ -48,10 +48,10 @@
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
                                         <state key="normal" title="Таймер" image="timer_menu">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleColor" red="0.1803921568627451" green="0.80000000000000004" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UkK-z4-TSJ">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UkK-z4-TSJ">
                                         <rect key="frame" x="8" y="100" width="124" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="lessThanOrEqual" constant="30" id="9L1-I2-B7d"/>
@@ -60,14 +60,15 @@
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Треннинг" image="training_menu">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleColor" red="0.1803921568627451" green="0.80000000000000004" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <segue destination="0KW-NS-o35" kind="presentation" id="DiZ-K7-LGU"/>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="2dn-zr-Ntt" secondAttribute="trailing" constant="8" id="3EE-Ab-OWp"/>
@@ -81,7 +82,6 @@
                                     <constraint firstAttribute="trailing" secondItem="UkK-z4-TSJ" secondAttribute="trailing" constant="8" id="efF-hd-9JR"/>
                                     <constraint firstItem="UkK-z4-TSJ" firstAttribute="leading" secondItem="fhl-UF-oMH" secondAttribute="leading" constant="8" id="ewB-oF-L6v"/>
                                     <constraint firstItem="INW-eb-Jqx" firstAttribute="top" secondItem="2dn-zr-Ntt" secondAttribute="bottom" constant="12" id="jLz-FE-Qlt"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="kvb-RJ-DoT"/>
                                     <constraint firstItem="UkK-z4-TSJ" firstAttribute="top" secondItem="fhl-UF-oMH" secondAttribute="top" constant="100" id="o7L-EY-EeK"/>
                                     <constraint firstItem="INW-eb-Jqx" firstAttribute="leading" secondItem="fhl-UF-oMH" secondAttribute="leading" constant="8" id="p1E-yO-2ii"/>
                                     <constraint firstItem="fEH-eU-dBU" firstAttribute="top" secondItem="INW-eb-Jqx" secondAttribute="bottom" constant="12" id="qhR-5A-ZBh"/>
@@ -93,35 +93,37 @@
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Сегодня" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fdp-rV-2s4">
                                 <rect key="frame" x="117" y="146" width="141" height="62"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="textColor" red="1" green="0.1764705882352941" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" red="0.2627450980392157" green="0.2627450980392157" blue="0.2627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="21.10.18" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sZu-BY-0LT">
                                 <rect key="frame" x="139" y="243" width="97" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="textColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qrp-YM-nEU">
-                                <rect key="frame" x="162" y="317" width="51" height="51"/>
+                                <rect key="frame" x="162" y="317" width="60" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" image="Diet"/>
                                 <connections>
                                     <action selector="openNutriton:" destination="BYZ-38-t0r" eventType="touchDown" id="l7g-d0-BtY"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DpE-MR-S1w">
-                                <rect key="frame" x="263" y="309" width="63" height="59"/>
+                                <rect key="frame" x="263" y="317" width="60" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" image="measurements"/>
                                 <connections>
                                     <action selector="openMeasurement:" destination="BYZ-38-t0r" eventType="touchDown" id="idr-cY-cOH"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PEA-VR-Bep">
-                                <rect key="frame" x="53" y="317" width="55" height="51"/>
+                                <rect key="frame" x="53" y="317" width="60" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="training"/>
                                 <connections>
@@ -129,49 +131,50 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Тренировки как у Скалы" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WbD-Ba-re7" userLabel="Text View ">
-                                <rect key="frame" x="8" y="389" width="359" height="270"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                <rect key="frame" x="8" y="667" width="359" height="270"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="270" id="Q06-pu-f2I"/>
                                 </constraints>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="1см" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AOy-na-r1C" userLabel="Text View Measurement">
-                                <rect key="frame" x="8" y="389" width="359" height="270"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="1см" adjustsFontForContentSizeCategory="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AOy-na-r1C" userLabel="Text View Measurement">
+                                <rect key="frame" x="8" y="667" width="359" height="270"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="270" id="u5j-IE-sVb"/>
                                 </constraints>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Шашлык \n картошечка" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="smF-VO-om0" userLabel="Text View Nutrition">
-                                <rect key="frame" x="8" y="389" width="359" height="270"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                <rect key="frame" x="8" y="667" width="359" height="270"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="270" id="bVS-AY-Kqq"/>
                                 </constraints>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.1803921568627451" green="0.80000000000000004" blue="0.44313725490196076" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="smF-VO-om0" secondAttribute="bottom" constant="8" id="1AT-iN-sN9"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="smF-VO-om0" secondAttribute="bottom" constant="-270" id="1AT-iN-sN9"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="smF-VO-om0" secondAttribute="trailing" constant="8" id="1EQ-IO-Kph"/>
                             <constraint firstItem="fhl-UF-oMH" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="1pN-8M-x3M"/>
                             <constraint firstItem="WbD-Ba-re7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="6Ym-v3-Pph"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AOy-na-r1C" secondAttribute="bottom" constant="8" id="MDW-jU-ok9"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="AOy-na-r1C" secondAttribute="bottom" constant="-270" id="MDW-jU-ok9"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WbD-Ba-re7" secondAttribute="trailing" constant="8" id="Ofz-mV-QJP"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="AOy-na-r1C" secondAttribute="trailing" constant="8" id="Ywo-tG-BLk"/>
                             <constraint firstItem="AOy-na-r1C" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="cMK-A1-VbX"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WbD-Ba-re7" secondAttribute="bottom" constant="8" id="dV1-gf-omi"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WbD-Ba-re7" secondAttribute="bottom" constant="-270" id="dV1-gf-omi"/>
+                            <constraint firstItem="fhl-UF-oMH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="fHZ-gz-NMr"/>
+                            <constraint firstItem="fhl-UF-oMH" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="64" id="hsf-hc-JOn"/>
                             <constraint firstItem="smF-VO-om0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="lcg-JQ-YNp"/>
-                            <constraint firstItem="fhl-UF-oMH" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="mpn-wA-ahp"/>
                             <constraint firstItem="fhl-UF-oMH" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="pGQ-TM-haW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -184,8 +187,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="LeadingConstraint" destination="mpn-wA-ahp" id="IXf-gN-r7U"/>
+                        <outlet property="barbellButton" destination="PEA-VR-Bep" id="lhM-tr-uaS"/>
                         <outlet property="bottomConstraint" destination="dV1-gf-omi" id="W0J-GQ-QsY"/>
+                        <outlet property="dietButton" destination="Qrp-YM-nEU" id="ThM-Cw-8aZ"/>
+                        <outlet property="measureButton" destination="DpE-MR-S1w" id="0Ks-Pz-rct"/>
                         <outlet property="menu" destination="fhl-UF-oMH" id="Mov-0V-KQz"/>
                         <outlet property="textView" destination="WbD-Ba-re7" id="eV1-3G-2kL"/>
                         <outlet property="textViewMesurement" destination="AOy-na-r1C" id="RQJ-jS-Bub"/>
@@ -194,7 +199,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="953" y="-347"/>
+            <point key="canvasLocation" x="952.79999999999995" y="-347.67616191904051"/>
         </scene>
         <!--Тренировки-->
         <scene sceneID="sCz-Se-5Lj">
@@ -380,13 +385,14 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Diet" width="51.200000762939453" height="51.200000762939453"/>
-        <image name="measure_menu" width="25.600000381469727" height="25.600000381469727"/>
-        <image name="measurements" width="51.200000762939453" height="51.200000762939453"/>
+        <image name="Diet" width="200" height="200"/>
+        <image name="measure_menu" width="37.5" height="37.5"/>
+        <image name="measurements" width="200" height="200"/>
         <image name="menuBurger" width="19.200000762939453" height="19.200000762939453"/>
-        <image name="nutrition_menu" width="25.600000381469727" height="25.600000381469727"/>
-        <image name="timer_menu" width="25.600000381469727" height="25.600000381469727"/>
-        <image name="training" width="51.200000762939453" height="51.200000762939453"/>
-        <image name="training_menu" width="25.600000381469727" height="25.600000381469727"/>
+        <image name="nutrition_menu" width="37.5" height="37.5"/>
+        <image name="timer_menu" width="37.5" height="37.5"/>
+        <image name="training" width="200" height="200"/>
+        <image name="training_menu" width="37.5" height="37.5"/>
     </resources>
+    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
