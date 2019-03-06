@@ -203,6 +203,7 @@ class ViewController: UIViewController {
         self.barbellButton.backgroundColor = UIColor.white
         self.barbellButton.layer.cornerRadius = self.barbellButton.bounds.size.width / 2
         
+        
     }
     func animateClosingTraining(){
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut, animations: {
@@ -244,7 +245,7 @@ class ViewController: UIViewController {
             self.textViewMesurement.frame = top
         })
         self.measureButton.backgroundColor = UIColor.white
-        self.measureButton.layer.cornerRadius = self.dietButton.bounds.size.width / 2
+        self.measureButton.layer.cornerRadius = self.measureButton.bounds.size.width / 2
     }
     func animateClosingMenu(){
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut, animations: {
