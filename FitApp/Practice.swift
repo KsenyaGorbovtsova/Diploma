@@ -11,16 +11,23 @@ import Foundation
 class Practice: NSObject {
 
     
-    var name: String = "Треня"
+    var name: String 
     var date: String
     var status: Bool
     var uid: String
-    public  init(date:String, status: Bool, uid: String) {
+    public  init(date:String, status: Bool, uid: String, name: String) {
         
         self.date = date
         self.status = status
         self.uid = uid
+        self.name = name
     }
     
+    public init(date: String, status: Bool, name: String) {
+        self.date = date
+        self.uid = "0"
+        self.name = name
+        self.status = status
+    }
     
 }

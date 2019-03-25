@@ -12,6 +12,8 @@ import UIKit
 class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     var nameFromEdit: String = ""
     var practiceid: String = ""
+    var flagConnectionIds = true
+    var idOfCreatedExercise: String = ""
     @IBOutlet weak var checkBoxStatus: UIButton!
     
     @IBAction func checkBoxStatus(_ sender: UIButton) {
@@ -30,6 +32,7 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         }
         
     }
+    
     @IBOutlet weak var numMeasureTextField: UITextField!
     @IBOutlet weak var exerciseNameTextfield: UITextField!
     @IBAction func cancelAddExercise(_ sender: UIBarButtonItem) {
@@ -37,17 +40,17 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     @IBAction func saveExercise(_ sender: UIBarButtonItem) {
         
-        dismiss(animated: true, completion: {let name = self.exerciseNameTextfield.text ?? ""
-            let apparatusId = "9573145E-DE11-4B0C-B6DA-37FA0813B307"
-            let measureId = "855DD747-ABE5-43FA-8A8F-13084E2A475D"
+        dismiss(animated: true, completion: {
+            let name = self.exerciseNameTextfield.text ?? ""
+            let apparatusId = "30888D77-07ED-4D58-8024-814D6B67FA5B"
+            let measureId = "09B38E5A-F420-4020-A943-660451B18701"
             let numMeasure = Int(self.numMeasureTextField.text ?? "") ?? 0
             /*var status = false
              if self.checkBoxStatus.isSelected == true {
              status = true
              }*/
             let exerciseToSave = self.prepareExercise(name: name, numTry: self.numTry, numRep: self.numRep, apparatusId: apparatusId, measureUnitId: measureId, status: self.checkBoxStatus.isSelected, numMeasure: numMeasure)
-            self.postExercise(exercise: exerciseToSave)
-            
+                self.postExercise(exercise: exerciseToSave)
         })
     }
     
@@ -120,7 +123,12 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     //print(json["id"] as! String)
                    // let exerciseId = json["id"] as! String
+                    if self.flagConnectionIds == true {
                     self.connectPracticeExercise(practiceId: self.practiceid, exerciseId: json["id"] as! String)
+                    } else {
+                        self.idOfCreatedExercise = json["id"] as! String
+                    }
+                    
                 }
             } catch let error {
                 print(error.localizedDescription)
@@ -158,5 +166,12 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             }
         })
         task.resume()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "newExercise" {
+            let newPractice: AddNewPractice = segue.destination as! AddNewPractice
+            newPractice.chosenExercises.append(self.idOfCreatedExercise)
+        }
     }
 }

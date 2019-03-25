@@ -41,7 +41,8 @@ class ListPractice: UITableViewController  {
                     let uid = x["id"] as? String
                     let date = x["date"] as? String
                     let status = x["status"] as? Bool
-                    let newPractice = Practice(date: date!, status: status!, uid: uid!)
+                    let name = x["name"] as? String
+                    let newPractice = Practice(date: date!, status: status!, uid: uid!, name: name!)
                     self.practiceList.append(newPractice)
             }
         }
@@ -88,7 +89,7 @@ class ListPractice: UITableViewController  {
         let practice: Practice = self.practiceList[indexPath.row]
         
         cell.textLabel?.text = practice.name
-        cell.detailTextLabel?.text = String(practice.status)
+        cell.detailTextLabel?.text = String(practice.date)
         
         return cell
     }

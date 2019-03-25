@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E1614BE22311A14002E167C /* AddNewPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1614BD22311A14002E167C /* AddNewPractice.swift */; };
+		9E23937C2247E65E00DB4FBB /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937B2247E65E00DB4FBB /* SignInController.swift */; };
+		9E23937E2247E67200DB4FBB /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937D2247E67200DB4FBB /* SignUpController.swift */; };
+		9E2393802247F08A00DB4FBB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937F2247F08A00DB4FBB /* User.swift */; };
+		9E56276D2237A52C00AE566A /* AllExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E56276C2237A52C00AE566A /* AllExerciseController.swift */; };
 		9E698566222D6C730004A54A /* AddNewExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E698565222D6C730004A54A /* AddNewExercise.swift */; };
 		9EB0B84322240D04008BF8EF /* DetailPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB0B84222240D04008BF8EF /* DetailPractice.swift */; };
 		9EB0B84522240DD2008BF8EF /* ListPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB0B84422240DD2008BF8EF /* ListPractice.swift */; };
@@ -22,6 +27,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9E1614BD22311A14002E167C /* AddNewPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPractice.swift; sourceTree = "<group>"; };
+		9E23937B2247E65E00DB4FBB /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
+		9E23937D2247E67200DB4FBB /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
+		9E23937F2247F08A00DB4FBB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9E56276C2237A52C00AE566A /* AllExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExerciseController.swift; sourceTree = "<group>"; };
 		9E698565222D6C730004A54A /* AddNewExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewExercise.swift; sourceTree = "<group>"; };
 		9EB0B84222240D04008BF8EF /* DetailPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPractice.swift; sourceTree = "<group>"; };
 		9EB0B84422240DD2008BF8EF /* ListPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPractice.swift; sourceTree = "<group>"; };
@@ -73,10 +83,15 @@
 				9EB0B84222240D04008BF8EF /* DetailPractice.swift */,
 				9EF758A4217E1C670033ACC1 /* AppDelegate.swift */,
 				9EF758A6217E1C670033ACC1 /* ViewController.swift */,
+				9E56276C2237A52C00AE566A /* AllExerciseController.swift */,
+				9E23937B2247E65E00DB4FBB /* SignInController.swift */,
+				9E23937D2247E67200DB4FBB /* SignUpController.swift */,
 				9EB0B84622240EB3008BF8EF /* Practice.swift */,
 				9EE4E6A122291A23007337E4 /* Exercise.swift */,
 				9EF758A8217E1C670033ACC1 /* Main.storyboard */,
 				9E698565222D6C730004A54A /* AddNewExercise.swift */,
+				9E23937F2247F08A00DB4FBB /* User.swift */,
+				9E1614BD22311A14002E167C /* AddNewPractice.swift */,
 				9EF758AE217E1C680033ACC1 /* Assets.xcassets */,
 				9EF758B0217E1C680033ACC1 /* LaunchScreen.storyboard */,
 				9EF758B3217E1C680033ACC1 /* Info.plist */,
@@ -156,14 +171,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E23937E2247E67200DB4FBB /* SignUpController.swift in Sources */,
 				9EB0B84722240EB3008BF8EF /* Practice.swift in Sources */,
 				9EB0B84322240D04008BF8EF /* DetailPractice.swift in Sources */,
 				9EE4E6A422293583007337E4 /* DetailExercise.swift in Sources */,
 				9EF758A7217E1C670033ACC1 /* ViewController.swift in Sources */,
 				9EF758AD217E1C670033ACC1 /* FitApp.xcdatamodeld in Sources */,
+				9E2393802247F08A00DB4FBB /* User.swift in Sources */,
+				9E1614BE22311A14002E167C /* AddNewPractice.swift in Sources */,
 				9E698566222D6C730004A54A /* AddNewExercise.swift in Sources */,
 				9EF758A5217E1C670033ACC1 /* AppDelegate.swift in Sources */,
 				9EE4E6A222291A23007337E4 /* Exercise.swift in Sources */,
+				9E23937C2247E65E00DB4FBB /* SignInController.swift in Sources */,
+				9E56276D2237A52C00AE566A /* AllExerciseController.swift in Sources */,
 				9EB0B84522240DD2008BF8EF /* ListPractice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

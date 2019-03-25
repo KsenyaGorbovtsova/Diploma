@@ -11,7 +11,10 @@ import UIKit
 
 class DetailPractice: UITableViewController {
     
-   
+    
+  
+    
+    
     @IBOutlet weak var AddExercise: UIBarButtonItem!
     
     override func viewDidLoad() {
