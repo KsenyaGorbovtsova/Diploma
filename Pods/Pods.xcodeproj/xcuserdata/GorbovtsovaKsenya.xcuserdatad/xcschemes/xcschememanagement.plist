@@ -4,24 +4,18 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>FitApp.xcscheme</key>
+		<key>Pods-FitApp.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>0</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
-		<key>FitApp.xcscheme_^#shared#^_</key>
+		<key>SwiftKeychainWrapper.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>0</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
-	<dict>
-		<key>9EF758A0217E1C670033ACC1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-	</dict>
+	<dict/>
 </dict>
 </plist>

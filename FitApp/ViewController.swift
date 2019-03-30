@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
 
 class ViewController: UIViewController {
     
@@ -16,6 +17,16 @@ class ViewController: UIViewController {
     var textShowing = false
     var textShowingNutrition = false
     var textShowingMeasurement = false
+   
+    @IBAction func signOutButton(_ sender: UIBarButtonItem) {
+        KeychainWrapper.standard.removeObject(forKey: "accessToken")
+        KeychainWrapper.standard.removeObject(forKey: "userId")
+        
+        let signInPage = self.storyboard?.instantiateViewController(withIdentifier: "signInNav") as! UINavigationController
+        let appDelegate = UIApplication.shared.delegate
+        appDelegate?.window??.rootViewController = signInPage
+    }
+    
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var barbellButton: UIButton!

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+
 class SignUp: UIViewController {
     
     @IBOutlet weak var firstNameTextField: UITextField!
@@ -48,9 +49,6 @@ class SignUp: UIViewController {
         let user = self.prepareUser(firstName: self.firstNameTextField.text!, secondName: self.secondNameTextField.text!, email: self.emailTextField.text!, password: self.pswdTextField.text!)
         
         self.postNewUser(user: user)
-       //self.DisplayWarnining(warning: "Successful registration", title: "Congrats" + "🎉", dismissing: true)
-        //dismiss(animated: true, completion: {self.DisplayWarnining(warning: "Successful registration", title: "Congrats"+"U+1F389")})
-        
     }
     
     func stopSpinner(spinner: UIActivityIndicatorView) {
@@ -110,16 +108,19 @@ class SignUp: UIViewController {
                 
                 //create json object from data
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    if json["error"] as! Bool == true {
+                    if let error = json["error"] {
+                    if error as! Bool == true {
                         self.DisplayWarnining(warning: "User already exist", title: "Warning", dismissing: false )
                         self.emailTextField.text = ""
                         self.confirmPswdTextField.text = ""
                         self.pswdTextField.text = ""
+                        }
                     }
                     else {
                         self.DisplayWarnining(warning: "Successful registration", title: "Congrats" + "🎉", dismissing: true)
                     }
                 }
+                
             } catch let error {
                 self.DisplayWarnining(warning: "Try again, please", title: "Warning", dismissing: false)
                 print(error.localizedDescription)

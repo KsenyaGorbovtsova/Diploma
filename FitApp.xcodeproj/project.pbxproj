@@ -12,6 +12,7 @@
 		9E23937E2247E67200DB4FBB /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937D2247E67200DB4FBB /* SignUpController.swift */; };
 		9E2393802247F08A00DB4FBB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937F2247F08A00DB4FBB /* User.swift */; };
 		9E56276D2237A52C00AE566A /* AllExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E56276C2237A52C00AE566A /* AllExerciseController.swift */; };
+		9E59224E224FA957006A5D37 /* Pods_FitApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4A41D44570DA147CD2EB5AF /* Pods_FitApp.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E698566222D6C730004A54A /* AddNewExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E698565222D6C730004A54A /* AddNewExercise.swift */; };
 		9EB0B84322240D04008BF8EF /* DetailPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB0B84222240D04008BF8EF /* DetailPractice.swift */; };
 		9EB0B84522240DD2008BF8EF /* ListPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB0B84422240DD2008BF8EF /* ListPractice.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		90D946D123EFF6C5632377EB /* Pods-FitApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FitApp.debug.xcconfig"; path = "Target Support Files/Pods-FitApp/Pods-FitApp.debug.xcconfig"; sourceTree = "<group>"; };
 		9E1614BD22311A14002E167C /* AddNewPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPractice.swift; sourceTree = "<group>"; };
 		9E23937B2247E65E00DB4FBB /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		9E23937D2247E67200DB4FBB /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
@@ -46,6 +48,8 @@
 		9EF758AE217E1C680033ACC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9EF758B1217E1C680033ACC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9EF758B3217E1C680033ACC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AEE0BBC3EA4E53A827A0DFA9 /* Pods-FitApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FitApp.release.xcconfig"; path = "Target Support Files/Pods-FitApp/Pods-FitApp.release.xcconfig"; sourceTree = "<group>"; };
+		F4A41D44570DA147CD2EB5AF /* Pods_FitApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FitApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E59224E224FA957006A5D37 /* Pods_FitApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +69,8 @@
 			children = (
 				9EF758A3217E1C670033ACC1 /* FitApp */,
 				9EF758A2217E1C670033ACC1 /* Products */,
+				A289C4641A3B3BB65C868159 /* Pods */,
+				DC0ED1709FBCA48518E38BCF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,6 +107,23 @@
 			path = FitApp;
 			sourceTree = "<group>";
 		};
+		A289C4641A3B3BB65C868159 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				90D946D123EFF6C5632377EB /* Pods-FitApp.debug.xcconfig */,
+				AEE0BBC3EA4E53A827A0DFA9 /* Pods-FitApp.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		DC0ED1709FBCA48518E38BCF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F4A41D44570DA147CD2EB5AF /* Pods_FitApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -107,9 +131,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9EF758B6217E1C680033ACC1 /* Build configuration list for PBXNativeTarget "FitApp" */;
 			buildPhases = (
+				5405ECF9A7726B436D8C6CA0 /* [CP] Check Pods Manifest.lock */,
 				9EF7589D217E1C670033ACC1 /* Sources */,
 				9EF7589E217E1C670033ACC1 /* Frameworks */,
 				9EF7589F217E1C670033ACC1 /* Resources */,
+				0F4D02CE293C57BFF56A26F4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -165,6 +191,53 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0F4D02CE293C57BFF56A26F4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FitApp/Pods-FitApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SwiftKeychainWrapper/SwiftKeychainWrapper.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FitApp/Pods-FitApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5405ECF9A7726B436D8C6CA0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FitApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9EF7589D217E1C670033ACC1 /* Sources */ = {
@@ -328,6 +401,7 @@
 		};
 		9EF758B7217E1C680033ACC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 90D946D123EFF6C5632377EB /* Pods-FitApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -345,6 +419,7 @@
 		};
 		9EF758B8217E1C680033ACC1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AEE0BBC3EA4E53A827A0DFA9 /* Pods-FitApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
