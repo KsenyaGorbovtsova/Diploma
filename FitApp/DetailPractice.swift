@@ -6,12 +6,15 @@
 //  Copyright © 2019 Gorbovtsova Ksenya. All rights reserved.
 //
 
-import Foundation
+import SwiftKeychainWrapper
 import UIKit
 
 class DetailPractice: UITableViewController {
     
-    
+    @objc func reloadTableViewAfterAddingExr (notifiction: Notification) {
+        self.exerciseList.removeAll()
+        self.requestExercise(id: self.practiceId)
+    }
   
     
     
@@ -19,16 +22,19 @@ class DetailPractice: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if self.practiceStatus == false {
+        if self.practiceStatus == false || self.practiceOwner != KeychainWrapper.standard.string(forKey: "userId") {
             print(practiceStatus)
             self.AddExercise.isEnabled = false
         }
         tableView.dataSource = self
         tableView.delegate = self
         requestExercise(id: practiceId)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingExr(notifiction:)), name: .reloadListExr, object: nil)
     }
     
+   
     var practiceId: String = ""
+    var practiceOwner: String = ""
     var practiceStatus: Bool = false
     var exerciseList = [Exercise]()
     private func parseExercise(data: Data) {
@@ -101,6 +107,7 @@ class DetailPractice: UITableViewController {
             let exercise = self.exerciseList[indexPath!.row]
             let detailExercise: DetailExercise = segue.destination as! DetailExercise
             detailExercise.exercise = exercise
+            detailExercise.practiceId = self.practiceId
         
         }
         
@@ -136,4 +143,7 @@ class DetailPractice: UITableViewController {
   
     
 
+}
+extension Notification.Name {
+    static let reloadListExr = Notification.Name("reloadListExr")
 }

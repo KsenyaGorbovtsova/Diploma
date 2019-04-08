@@ -12,22 +12,23 @@ class Practice: NSObject {
 
     
     var name: String 
-    var date: String
+    var owner: String
     var status: Bool
     var uid: String
-    public  init(date:String, status: Bool, uid: String, name: String) {
+    public  init( status: Bool, uid: String, name: String, owner: String) {
         
-        self.date = date
+        self.owner = owner
         self.status = status
         self.uid = uid
         self.name = name
     }
     
-    public init(date: String, status: Bool, name: String) {
-        self.date = date
+    public init(status: Bool, name: String, owner: String) {
+        
         self.uid = "0"
         self.name = name
         self.status = status
+        self.owner = owner
     }
     
 }

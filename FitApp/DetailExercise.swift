@@ -12,6 +12,7 @@ import UIKit
 class DetailExercise: UIViewController {
     
     var exercise: Exercise!
+    var practiceId = ""
     
     @IBOutlet weak var nameExercise: UILabel!
     
@@ -31,6 +32,7 @@ class DetailExercise: UIViewController {
         super.viewWillAppear(animated)
         if self.exercise.status == false {
             self.editButton.isEnabled = false
+            
         }
         
         if exercise != nil {
@@ -48,6 +50,9 @@ class DetailExercise: UIViewController {
         if segue.identifier == "editExercise" {
             let addExercise: AddNewExercise = segue.destination as! AddNewExercise
             addExercise.nameFromEdit = self.nameExercise.text ?? ""
+            addExercise.flagEdit = true
+            addExercise.practiceid = self.practiceId
+            addExercise.idOfEditedExercise = self.exercise.uid
             
         }
     }

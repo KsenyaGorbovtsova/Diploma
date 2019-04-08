@@ -6,14 +6,16 @@
 //  Copyright © 2019 Gorbovtsova Ksenya. All rights reserved.
 //
 
-import Foundation
+import SwiftKeychainWrapper
 import UIKit
 
 class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     var nameFromEdit: String = ""
     var practiceid: String = ""
     var flagConnectionIds = true
+    var flagEdit = false
     var idOfCreatedExercise: String = ""
+    var idOfEditedExercise = ""
     @IBOutlet weak var checkBoxStatus: UIButton!
     
     @IBAction func checkBoxStatus(_ sender: UIButton) {
@@ -40,10 +42,10 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     @IBAction func saveExercise(_ sender: UIBarButtonItem) {
         
-        dismiss(animated: true, completion: {
+        
             let name = self.exerciseNameTextfield.text ?? ""
-            let apparatusId = "30888D77-07ED-4D58-8024-814D6B67FA5B"
-            let measureId = "09B38E5A-F420-4020-A943-660451B18701"
+            let apparatusId = "ABE20528-B13B-482D-8E85-9552464D4506"
+            let measureId = "F90AF7F0-B396-4B0D-8C2E-68254E64D252"
             let numMeasure = Int(self.numMeasureTextField.text ?? "") ?? 0
             /*var status = false
              if self.checkBoxStatus.isSelected == true {
@@ -51,7 +53,12 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
              }*/
             let exerciseToSave = self.prepareExercise(name: name, numTry: self.numTry, numRep: self.numRep, apparatusId: apparatusId, measureUnitId: measureId, status: self.checkBoxStatus.isSelected, numMeasure: numMeasure)
                 self.postExercise(exercise: exerciseToSave)
-        })
+            NotificationCenter.default.post(name: .reloadListExr, object: nil)
+            self.dismiss(animated: true, completion: nil)
+       
+        
+        
+        
     }
     
     @IBOutlet weak var picker: UIPickerView!
@@ -120,21 +127,25 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             }
             do {
                 //create json object from data
-                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    //print(json["id"] as! String)
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String:Any]   {
+                    
                    // let exerciseId = json["id"] as! String
-                    if self.flagConnectionIds == true {
+                  //  for x in json {
+                    if self.flagConnectionIds == true || self.flagEdit == true {
                     self.connectPracticeExercise(practiceId: self.practiceid, exerciseId: json["id"] as! String)
                     } else {
                         self.idOfCreatedExercise = json["id"] as! String
                     }
+                 //   }
                     
                 }
+                
             } catch let error {
                 print(error.localizedDescription)
             }
         })
         task.resume()
+        
     }
     
     private func connectPracticeExercise(practiceId: String, exerciseId:String) {
@@ -157,13 +168,19 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 return
             }
             do {
-                //create json object from data
-                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    print(json)
+                
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers ) as? Dictionary<String,Any> {
+                    if self.flagEdit == true {
+                        DispatchQueue.main.async {
+                        self.DisplayWarnining(warning: "Do you want delete old version of the exercise?", title: "Delete or not?")
+                    }
+                    }
                 }
+                
             } catch let error {
                 print(error.localizedDescription)
             }
+            
         })
         task.resume()
     }
@@ -174,4 +191,44 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             newPractice.chosenExercises.append(self.idOfCreatedExercise)
         }
     }
+    private func deleteExerciseFromPractice(practiceId: String, exerciseId: String) {
+        //let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/practices/\(self.practiceid)/deleteExercise")
+        let params = ["delete" : self.idOfEditedExercise]
+        var request = URLRequest(url: url!)
+        request.httpMethod = "DELETE"
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        //request.addValue("Bearer \(String(describing: accessToken))", forHTTPHeaderField: "Authorization")
+        let task = URLSession.shared.dataTask(with: request)
+        task.resume()
+    }
+    
+    func DisplayWarnining (warning: String, title: String) -> Void {
+        
+            let warningController = UIAlertController(title: title, message: warning, preferredStyle: .alert)
+            
+            warningController.addAction(UIAlertAction(title: "Yes", style: .default, handler: {(_: UIAlertAction!) in
+                DispatchQueue.main.async {
+                    
+                self.deleteExerciseFromPractice(practiceId: self.practiceid, exerciseId: self.idOfEditedExercise)
+                self.dismiss(animated: true, completion: nil)
+                }
+            }))
+           warningController.addAction(UIAlertAction(title: "No", style: .default, handler: {(_: UIAlertAction!) in
+                DispatchQueue.main.async {
+                    warningController.dismiss(animated: true, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
+                }
+                }))
+            
+            self.present(warningController, animated: true, completion: nil)
+        }
+        
+    
 }

@@ -26,13 +26,15 @@ class AddNewPractice: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(setChosenExercises(notification:)), name: .chosenExercise, object: nil)
         datePicker.maximumDate = Date()
+        print(chosenExercises)
         
         
     }
     
-    private func preparePractice (name: String, status: Bool, date: String) -> Practice {
-        let newPractice = Practice(date: date, status: status,  name: name)
+    private func preparePractice (name: String, status: Bool, owner: String ) -> Practice {
+        let newPractice = Practice(status: status, name: name,  owner: owner)
         return newPractice
     }
     
@@ -47,4 +49,19 @@ class AddNewPractice: UIViewController {
         }
     }
     
+    
+    
+    @objc func setChosenExercises(notification: Notification) {
+        if let data = notification.userInfo as? [String:String] {
+            for x in data {
+                self.chosenExercises.append(x.value)
+                print(chosenExercises)
+            }
+        }
+        
+    }
+    
+}
+extension Notification.Name {
+    static let chosenExercise = Notification.Name("chosenExercise")
 }
