@@ -11,6 +11,7 @@
 		9E23937C2247E65E00DB4FBB /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937B2247E65E00DB4FBB /* SignInController.swift */; };
 		9E23937E2247E67200DB4FBB /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937D2247E67200DB4FBB /* SignUpController.swift */; };
 		9E2393802247F08A00DB4FBB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937F2247F08A00DB4FBB /* User.swift */; };
+		9E288A7E2263827300DD9140 /* FriendsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E288A7D2263827300DD9140 /* FriendsController.swift */; };
 		9E56276D2237A52C00AE566A /* AllExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E56276C2237A52C00AE566A /* AllExerciseController.swift */; };
 		9E59224E224FA957006A5D37 /* Pods_FitApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4A41D44570DA147CD2EB5AF /* Pods_FitApp.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E698566222D6C730004A54A /* AddNewExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E698565222D6C730004A54A /* AddNewExercise.swift */; };
@@ -33,6 +34,7 @@
 		9E23937B2247E65E00DB4FBB /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		9E23937D2247E67200DB4FBB /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		9E23937F2247F08A00DB4FBB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9E288A7D2263827300DD9140 /* FriendsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsController.swift; sourceTree = "<group>"; };
 		9E56276C2237A52C00AE566A /* AllExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExerciseController.swift; sourceTree = "<group>"; };
 		9E698565222D6C730004A54A /* AddNewExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewExercise.swift; sourceTree = "<group>"; };
 		9EB0B84222240D04008BF8EF /* DetailPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPractice.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 				9EB0B84622240EB3008BF8EF /* Practice.swift */,
 				9EE4E6A122291A23007337E4 /* Exercise.swift */,
 				9EF758A8217E1C670033ACC1 /* Main.storyboard */,
+				9E288A7D2263827300DD9140 /* FriendsController.swift */,
 				9E698565222D6C730004A54A /* AddNewExercise.swift */,
 				9E23937F2247F08A00DB4FBB /* User.swift */,
 				9E1614BD22311A14002E167C /* AddNewPractice.swift */,
@@ -245,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E23937E2247E67200DB4FBB /* SignUpController.swift in Sources */,
+				9E288A7E2263827300DD9140 /* FriendsController.swift in Sources */,
 				9EB0B84722240EB3008BF8EF /* Practice.swift in Sources */,
 				9EB0B84322240D04008BF8EF /* DetailPractice.swift in Sources */,
 				9EE4E6A422293583007337E4 /* DetailExercise.swift in Sources */,
@@ -405,6 +409,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = FitApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -423,6 +428,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = FitApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

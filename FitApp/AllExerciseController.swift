@@ -18,6 +18,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     var filteredTableData = [Exercise]()
     var tappededit = false
     var preparation = [Exercise]()
+    var detailExerFlag = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +30,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         navigationItem.searchController = resultSearch
         navigationItem.searchController?.searchBar.delegate = self
         definesPresentationContext = true
-        
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = "Done"
         tableView.dataSource = self
         tableView.delegate = self
         tableView.allowsMultipleSelection = true
@@ -56,7 +57,12 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
                self.selectedExercises[self.exerciseList[x[1]].name] = self.exerciseList[x[1]].uid
                 }
                // print(selectedExercises)
-                NotificationCenter.default.post(name:.chosenExercise, object: nil, userInfo: selectedExercises)
+                if self.detailExerFlag == false {
+                    NotificationCenter.default.post(name:.chosenExercise, object: nil, userInfo: selectedExercises)
+                }
+                else if detailExerFlag == true {
+                    NotificationCenter.default.post(name: .searchExerAndAdd, object: nil, userInfo: selectedExercises)
+                }
             }
             dismiss(animated: true, completion: nil)
         //})
@@ -108,7 +114,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         }
         
     }
-    private func requestExercises() {
+    private func requestExercises()  {
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/exercises/")!
         let dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
             guard

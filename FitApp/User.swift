@@ -13,9 +13,17 @@ class User: NSObject {
     var secondName: String
     var email: String
     var password: String
-    
-    public init( email: String, password: String, firstName: String, secondName: String) {
+    var uid: String
+    public init (email: String, uid: String, firstName: String, secondName: String) {
+        self.password = "0"
+        self.firstName = firstName
+        self.secondName = secondName
+        self.email = email
+        self.uid = uid
         
+    }
+    public init( email: String, password: String, firstName: String, secondName: String) {
+        self.uid = "0"
         self.firstName = firstName
         self.secondName = secondName
         self.email = email

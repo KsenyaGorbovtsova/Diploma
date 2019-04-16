@@ -44,8 +44,8 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         
             let name = self.exerciseNameTextfield.text ?? ""
-            let apparatusId = "ABE20528-B13B-482D-8E85-9552464D4506"
-            let measureId = "F90AF7F0-B396-4B0D-8C2E-68254E64D252"
+            let apparatusId = "873945D4-50C0-4C7A-AFA3-9126438C7000"
+            let measureId = "86D6C843-7D94-47E4-B58A-77FA31BAB503"
             let numMeasure = Int(self.numMeasureTextField.text ?? "") ?? 0
             /*var status = false
              if self.checkBoxStatus.isSelected == true {

@@ -60,8 +60,9 @@ class ListPractice: UITableViewController  {
     
     private func requestPractice(){
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
-        //print(accessToken)
+        print(accessToken)
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
+        print(userid)
         let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/users/" + userid! + "/practices")!
         //print(url)
         var request = URLRequest(url: url)
