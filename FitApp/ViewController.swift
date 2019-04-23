@@ -10,7 +10,7 @@ import UIKit
 import SwiftKeychainWrapper
 
 class ViewController: UIViewController {
-    
+    var userData = User()
     var menuShowing = false
     @IBOutlet weak var LeadingConstraint: NSLayoutConstraint!
     
@@ -18,6 +18,8 @@ class ViewController: UIViewController {
     var textShowingNutrition = false
     var textShowingMeasurement = false
    
+  
+    
     @IBAction func signOutButton(_ sender: UIBarButtonItem) {
         KeychainWrapper.standard.removeObject(forKey: "accessToken")
         KeychainWrapper.standard.removeObject(forKey: "userId")
@@ -39,7 +41,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var textViewMesurement: UITextView!
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+      self.requestUserData()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadUserData(notification:)), name: .updateInfo, object: nil)
         // Do any additional setup after loading the view, typically from a nib.
         //self.textView.isHidden = true
         self.textView.clipsToBounds = false
@@ -272,6 +277,89 @@ class ViewController: UIViewController {
             self.menu.frame = side
         })
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "userSettings" {
+            
+            let navController = segue.destination as! UINavigationController
+            let detailUser = navController.topViewController as! ProfileController
+            detailUser.flagUserOrFriend = true
+
+            detailUser.firstNameSegue = self.userData.firstName
+            detailUser.secondNameSegue = self.userData.secondName
+            detailUser.emailSegue = self.userData.email
+            detailUser.imageSegue = self.userData.image
+        }
+    }
+    
+    
+    
+    private func requestUserData(){
+        let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
+        let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/users/" + userId!)!
+        var request = URLRequest(url:url)
+        request.httpMethod = "GET"
+        if var key = accessToken {
+            key = "Bearer " + key
+            request.setValue(key, forHTTPHeaderField: "Authorization")
+        }
+        let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard error == nil else {
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            do {
+                
+                self.parseUser(data: data)
+            }
+            catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        dataTask.resume()
+    }
+    
+    private func parseUser(data: Data)  {
+        var firstName = String()
+        var secondName = String()
+        var email = String()
+        var image = Data()
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: data)
+            if var jsonDict: [String:String ] = jsonObject as? [String : String] {
+                firstName = jsonDict["firstName"]!
+                secondName = jsonDict["secondName"]!
+                email = jsonDict["email"]!
+                if  let imageData = jsonDict["image"] {
+                    image = Data(imageData.utf8)
+                }
+                else {
+                    image = (UIImage(named: "noPhoto")?.pngData())!
+                }
+                self.userData = User(email: email, uid: "0", firstName: firstName, secondName: secondName, image: image)
+                
+            }
+            else {
+                print("Invalid JSON")
+            }
+        }
+        catch {
+            print ("JSON parsing error:"+error.localizedDescription)
+            
+        }
+        
+    }
+    
+    @objc func reloadUserData(notification: NSNotification) {
+        self.requestUserData()
+    }
+    
 }
 
 
+extension Notification.Name {
+    static let updateInfo = Notification.Name("updateUserInfo")
+}

@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FitApp/AddNewExercise.swift"
-            timestampString = "577106523.9039741"
+            filePath = "FitApp/ViewController.swift"
+            timestampString = "577699841.581967"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
-            landmarkName = "DisplayWarnining(warning:title:)"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
+            landmarkName = "parseUser(data:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FitApp/AllExerciseController.swift"
-            timestampString = "577106523.904048"
+            filePath = "FitApp/ProfileController.swift"
+            timestampString = "577709643.074217"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
-            landmarkName = "doneAddingExercises(_:)"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
+            landmarkName = "updateUserInformation()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,13 +41,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FitApp/FriendsController.swift"
-            timestampString = "577106523.9041049"
+            filePath = "FitApp/ProfileController.swift"
+            timestampString = "577709643.0746239"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
-            landmarkName = "filterForSearch(_:scope:)"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "updateUserInformation()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

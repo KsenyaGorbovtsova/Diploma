@@ -37,7 +37,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         request.httpMethod = "GET"
         if var key = accessToken {
             key = "Bearer " + key
-            request.setValue( "Bearer" + key, forHTTPHeaderField: "Authorization")
+            request.setValue(key, forHTTPHeaderField: "Authorization")
         }
         let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
@@ -72,7 +72,8 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
                     let firstName = x["firstName"] as? String
                     let secondName = x["secondName"] as? String
                     let email = x["email"] as? String
-                    let newFriend = User(email: email!, uid: uid!, firstName: firstName!, secondName: secondName!)
+                    let image = x["image"] as? Data
+                    let newFriend = User(email: email!, uid: uid!, firstName: firstName!, secondName: secondName!, image: image ?? (UIImage(named: "noPhoto")?.pngData()!)!)
                     userList.append(newFriend)
                 }
             }
@@ -155,6 +156,24 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
             return [deleteFriend]
+        }
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "userData" {
+             let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
+            let navController = segue.destination as! UINavigationController
+               let detailFriend = navController.topViewController as! ProfileController
+            let userid = self.friendsList[indexPath!.row].uid
+            let firstName = self.friendsList[indexPath!.row].firstName
+            let secondName = self.friendsList[indexPath!.row].secondName
+            let email = self.friendsList[indexPath!.row].email
+            let image = self.friendsList[indexPath!.row].image
+            detailFriend.idFriend = userid
+            detailFriend.firstName = firstName
+            detailFriend.secondName = secondName
+            detailFriend.email = email
+            detailFriend.image = image
+            
         }
     }
    
