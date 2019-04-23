@@ -123,11 +123,24 @@ class ProfileController: UIViewController {
         if self.pswdTextField.text != "" && self.confirmpswdTextField.text == self.pswdTextField.text {
             params["password"] = self.pswdTextField.text
         }
-        if self.imageView.image?.pngData() != self.imageSegue {
+        else if self.confirmpswdTextField.text != self.pswdTextField.text {
+            self.DisplayWarnining(warning: "Проверьте правильность ввода паролей", title: "Ooops", dismissing: false)
+            self.confirmpswdTextField.text = ""
+            self.pswdTextField.text = ""
+        }
+        
+        if self.imageView.image?.pngData() != UIImage(data:Data.init(base64Encoded: self.imageSegue, options: .init(rawValue: 0))!)?.pngData()! {
+           
             let imageData:NSData = self.imageView.image!.jpegData(compressionQuality: 0.5)! as NSData //UIImagePNGRepresentation(img)
             let imgString = imageData.base64EncodedString(options: .init(rawValue: 0))
             params["image"] = imgString
            // print(params["image"])
+        }
+        if params.count == 0 {
+            
+            self.stopSpinner(spinner: self.spinner)
+            dismiss(animated: true, completion: nil)
+            return
         }
         let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
