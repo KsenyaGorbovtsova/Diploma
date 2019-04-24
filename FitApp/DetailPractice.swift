@@ -140,7 +140,7 @@ class DetailPractice: UITableViewController {
     
     private func deleteExercise(id: String) {
         let url = "https://shielded-chamber-25933.herokuapp.com/exercises/"
-        let deletedURL = URL(string: url + id + "/delete")
+        let deletedURL = URL(string: url + id)
         var request = URLRequest(url: deletedURL!)
         request.httpMethod = "DELETE"
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")

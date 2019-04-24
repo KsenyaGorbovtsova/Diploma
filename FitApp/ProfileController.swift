@@ -40,6 +40,7 @@ class ProfileController: UIViewController {
     var email = ""
     var image: Data = Data()
     var flagUserOrFriend = false // user - true, friend - false
+    var flagAddedFriend = false // friend from filteredData - false, friend from friendList - true
     
     @IBAction func photoPickerClicked(_ sender: UIButton) {
         self.photoPicker.present(from: sender)
@@ -61,7 +62,13 @@ class ProfileController: UIViewController {
             self.emaiTextField.isHidden = true
             self.pswdTextField.isHidden = true
             self.confirmpswdTextField.isHidden = true
-            self.rightButton.title = "Добавить"
+            if self.flagAddedFriend == false {
+                self.rightButton.title = "Добавить"
+                
+            }
+            else {
+                 self.rightButton.title = "Удалить"
+            }
             self.confirmPswdLine.isHidden = true
             self.newPswdLine.isHidden = true
             self.photoPickerButton.isHidden = true
@@ -90,8 +97,19 @@ class ProfileController: UIViewController {
         }
     }
     @IBAction func righButtonClicked(_ sender: UIBarButtonItem) {
-        if self.flagUserOrFriend == false {
+       
+        if self.flagUserOrFriend == false && self.flagAddedFriend == false {
+            self.addOrDeleteFriendToUser(idFriend: self.idFriend, action: "Add")
+             NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+            dismiss(animated: true, completion: nil)
             
+            
+        }
+        else if self.flagUserOrFriend == false && self.flagAddedFriend == true {
+            self.addOrDeleteFriendToUser(idFriend: self.idFriend, action: "Delete")
+            NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+             dismiss(animated: true, completion: nil)
+           
         }
         else {
             self.spinner.color = UIColor.green
@@ -101,6 +119,7 @@ class ProfileController: UIViewController {
             view.addSubview(self.spinner)
             self.updateUserInformation()
         }
+        
     }
     
     @IBAction func doneButton(_ sender: UIBarButtonItem) {
@@ -137,7 +156,6 @@ class ProfileController: UIViewController {
            // print(params["image"])
         }
         if params.count == 0 {
-            
             self.stopSpinner(spinner: self.spinner)
             dismiss(animated: true, completion: nil)
             return
@@ -192,6 +210,44 @@ class ProfileController: UIViewController {
             warningController.addAction(buttonAction)
             self.present(warningController, animated: true, completion: nil)
         }
+        
+    }
+    
+    func addOrDeleteFriendToUser (idFriend: String, action: String) {
+        var endPoint = ""
+        var params = [String : Any]()
+        var httpMethod = ""
+        if action == "Add" {
+            endPoint = "addfriend"
+            params = ["makeFriend" : idFriend]
+            httpMethod = "POST"
+        }
+        if action == "Delete" {
+            endPoint = "deletefriend"
+            params = ["delete" : idFriend]
+            httpMethod = "DELETE"
+        }
+        let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
+        
+        let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/users/\(userId!)/\(endPoint)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = httpMethod
+        if var key = accessToken {
+            key = "Bearer " + key
+            request.setValue( "Bearer" + key, forHTTPHeaderField: "Authorization")
+            
+        }
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        let task = URLSession.shared.dataTask(with: request as URLRequest)
+       
+        task.resume()
         
     }
     

@@ -16,6 +16,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     var search = UISearchController(searchResultsController: nil)
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingFriend(notifiction:)), name: .reloadListFriend, object: nil)
         search.searchResultsUpdater = self
         search.obscuresBackgroundDuringPresentation = false
         search.searchBar.placeholder = "Search Users"
@@ -163,16 +164,34 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
              let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
             let navController = segue.destination as! UINavigationController
                let detailFriend = navController.topViewController as! ProfileController
-            let userid = self.friendsList[indexPath!.row].uid
-            let firstName = self.friendsList[indexPath!.row].firstName
-            let secondName = self.friendsList[indexPath!.row].secondName
-            let email = self.friendsList[indexPath!.row].email
-            let image = self.friendsList[indexPath!.row].image
-            detailFriend.idFriend = userid
+            var userId = ""
+            var firstName = ""
+            var secondName = ""
+            var email = ""
+            var image = Data()
+            var addFlag = false
+            if isFiltering() {
+                userId = self.filteredData[indexPath!.row].uid
+                firstName = self.filteredData[indexPath!.row].firstName
+                secondName = self.filteredData[indexPath!.row].secondName
+                email = self.filteredData[indexPath!.row].email
+                image = self.filteredData[indexPath!.row].image
+            }
+            else {
+                userId = self.friendsList[indexPath!.row].uid
+                firstName = self.friendsList[indexPath!.row].firstName
+                secondName = self.friendsList[indexPath!.row].secondName
+                email = self.friendsList[indexPath!.row].email
+                image = self.friendsList[indexPath!.row].image
+                addFlag = true
+            }
+           
+            detailFriend.idFriend = userId
             detailFriend.firstName = firstName
             detailFriend.secondName = secondName
             detailFriend.email = email
             detailFriend.image = image
+            detailFriend.flagAddedFriend = addFlag
             
         }
     }
@@ -259,18 +278,18 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         return search.isActive && !SearchBarIsEmpty()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingFriend(notifiction:)), name: .reloadListFriend, object: nil)
+         NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+        /*NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingFriend(notifiction:)), name: .reloadListFriend, object: nil)*/
     }
     @objc func reloadTableViewAfterAddingFriend (notifiction: Notification) {
         self.friendsList.removeAll()
         self.requestFriends()
+        print("work")
     }
-    
-    
-    
 }
+
 extension Notification.Name {
-    static let reloadListFriend = Notification.Name("reloadFriend")
+    static let reloadListFriend = Notification.Name("reloadListFriend")
 }
 
 
