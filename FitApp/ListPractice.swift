@@ -10,10 +10,24 @@ import SwiftKeychainWrapper
 import UIKit
 
 class ListPractice: UITableViewController  {
-    
    
     
-    var practiceList = [Practice]()
+    
+    
+   
+    var ObjectArray = [Objects]()
+    var practiceList = [String : [Practice]]() {
+        didSet {
+            //self.ObjectArray.removeAll()
+            for (key, value) in self.practiceList {
+                if ObjectArray.contains(Objects(sectionName: key, sectionObjects: value)) {
+                    continue
+                } else {
+                self.ObjectArray.append(Objects(sectionName: key, sectionObjects: value))
+                }
+            }
+        }
+    }
   /*  override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.dataSource = self
@@ -23,6 +37,15 @@ class ListPractice: UITableViewController  {
     }
  
     */
+    struct Objects : Hashable {
+        var sectionName: String
+        var sectionObjects = [Practice] ()
+       
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(sectionName)
+            
+        }
+    }
     
     
    override func viewDidLoad() {
@@ -45,8 +68,17 @@ class ListPractice: UITableViewController  {
                     let owner = x["owner"] as? String
                     let status = x["status"] as? Bool
                     let name = x["name"] as? String
-                    let newPractice = Practice(status: status!, uid: uid!, name: name!, owner: owner!)
-                    self.practiceList.append(newPractice)
+                    let date = x["date"] as? String
+                    let formatDate = Date.getFormattedDate(string: date!, formatter: "yyyy-MM-dd'T'HH:mm:ssZ", newFormat: "dd MMM,yyyy")
+                    let repeatAfter = x["repeatAfter"] as? Int
+                    let newPractice = Practice(status: status!, uid: uid!, name: name!, owner: owner!, date: formatDate, repeatAfter: repeatAfter!)
+                    if self.practiceList.keys.contains(formatDate) {
+                        self.practiceList[formatDate]?.append(newPractice)
+                    }
+                    else {
+                        self.practiceList[formatDate] = [newPractice]
+                    }
+                    //self.practiceList.append(newPractice)
             }
         }
             else {
@@ -112,26 +144,33 @@ class ListPractice: UITableViewController  {
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        
+        return self.ObjectArray.count
     }
     
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.practiceList.count
+       return self.ObjectArray[section].sectionObjects.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let practice: Practice = self.practiceList[indexPath.row]
+        let practice: Practice = ObjectArray[indexPath.section].sectionObjects[indexPath.row]
+        
         
         cell.textLabel?.text = practice.name
         //cell.detailTextLabel?.text = String(practice.date)
         
         return cell
     }
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return ObjectArray[section].sectionName
+    }
     
     private func deletePractice(id:String) {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
+        
         let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/users/\(userid)/delete")
         //let deletedURL = URL(string: url + id + "/delete")
         var request = URLRequest(url: url!)
@@ -145,8 +184,10 @@ class ListPractice: UITableViewController  {
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let delete = UITableViewRowAction(style: .destructive, title: "Удалить") { (action, indexPath) in
-            let deletedId = self.practiceList[indexPath.row].uid
-            self.practiceList.remove(at: indexPath.row)
+            let deletedId = self.ObjectArray[indexPath.section].sectionObjects[indexPath.row].uid
+            
+            self.ObjectArray[indexPath.section].sectionObjects.remove(at: indexPath.row)
+           // self.practiceList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             self.deletePractice(id: deletedId)
         
@@ -165,12 +206,12 @@ class ListPractice: UITableViewController  {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detailPractice" {
             let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
-            let practice = self.practiceList[indexPath!.row].uid
-            let rights = self.practiceList[indexPath!.row].owner
+            let practice = self.ObjectArray[indexPath!.section].sectionObjects[indexPath!.row].uid
+            let rights = self.ObjectArray[indexPath!.section].sectionObjects[indexPath!.row].owner
             let detailPractice: DetailPractice = segue.destination as! DetailPractice
             detailPractice.practiceId = practice
             detailPractice.practiceOwner = rights
-            detailPractice.practiceStatus = self.practiceList[indexPath!.row].status
+            detailPractice.practiceStatus = self.ObjectArray[indexPath!.section].sectionObjects[indexPath!.row].status
         }
     }
 
@@ -197,4 +238,16 @@ class ListPractice: UITableViewController  {
     
 
     
-
+extension Date {
+    static func getFormattedDate(string: String , formatter:String, newFormat: String) -> String{
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = formatter//"yyyy-MM-dd'T'HH:mm:ssZ"
+        
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = newFormat//"MMM dd,yyyy"
+        
+        let date: Date? = dateFormatterGet.date(from: string)//"2018-02-01T19:10:04+00:00")
+      ///  print("Date",dateFormatterPrint.string(from: date!)) // Feb 01,2018
+        return dateFormatterPrint.string(from: date!);
+    }
+}

@@ -16,6 +16,7 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var flagEdit = false
     var idOfCreatedExercise: String = ""
     var idOfEditedExercise = ""
+    var apparatusId = String()
     @IBOutlet weak var checkBoxStatus: UIButton!
     
     @IBAction func checkBoxStatus(_ sender: UIButton) {
@@ -44,14 +45,16 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         
             let name = self.exerciseNameTextfield.text ?? ""
-            let apparatusId = "4EEB3896-74E2-461A-94DF-3A5B1C7F83DA"
+            if self.apparatusId == "" {
+                self.apparatusId = "5F067340-E82A-4362-A2FD-11E3AD7C4F8D"
+            }
             let measureId = "C7960E44-36B0-46FB-8FA4-1BFCFA2F28CF"
             let numMeasure = Int(self.numMeasureTextField.text ?? "") ?? 0
             /*var status = false
              if self.checkBoxStatus.isSelected == true {
              status = true
              }*/
-            let exerciseToSave = self.prepareExercise(name: name, numTry: self.numTry, numRep: self.numRep, apparatusId: apparatusId, measureUnitId: measureId, status: self.checkBoxStatus.isSelected, numMeasure: numMeasure)
+            let exerciseToSave = self.prepareExercise(name: name, numTry: self.numTry, numRep: self.numRep, apparatusId: self.apparatusId, measureUnitId: measureId, status: self.checkBoxStatus.isSelected, numMeasure: numMeasure)
                 self.postExercise(exercise: exerciseToSave)
             NotificationCenter.default.post(name: .reloadListExr, object: nil)
             self.dismiss(animated: true, completion: nil)
@@ -68,6 +71,7 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(addApparatusId(notification:)), name: .apparatusId, object: nil)
         //self.checkBoxStatus.isSelected = false
         let image = UIImage(named: "box") as UIImage?
         self.checkBoxStatus.layer.cornerRadius = self.checkBoxStatus.bounds.size.width / 2
@@ -190,6 +194,11 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             let newPractice: AddNewPractice = segue.destination as! AddNewPractice
             newPractice.chosenExercises.append(self.idOfCreatedExercise)
         }
+        if segue.identifier == "chooseApparatusButton" {
+             let navController = segue.destination as! UINavigationController
+            let apparatusList = navController.topViewController as!  ListApparatus
+            apparatusList.chosenApparatus = self.apparatusId
+        }
     }
     private func deleteExerciseFromPractice(practiceId: String, exerciseId: String) {
         //let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
@@ -229,6 +238,17 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             
             self.present(warningController, animated: true, completion: nil)
         }
-        
+    @objc func addApparatusId (notification: Notification) {
+        if let data = notification.userInfo as? [String:String]{
+            for x in data {
+                self.apparatusId = x.value
+            }
+            print(self.apparatusId)
+        }
+    }
     
+}
+
+extension Notification.Name {
+    static let apparatusId = Notification.Name("apparatusId")
 }

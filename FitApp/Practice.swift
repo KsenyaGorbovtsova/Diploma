@@ -15,20 +15,26 @@ class Practice: NSObject {
     var owner: String
     var status: Bool
     var uid: String
-    public  init( status: Bool, uid: String, name: String, owner: String) {
+    var date: String
+    var repeatAfter: Int
+    public  init( status: Bool, uid: String, name: String, owner: String, date: String, repeatAfter: Int) {
         
         self.owner = owner
         self.status = status
         self.uid = uid
         self.name = name
+        self.date = date
+        self.repeatAfter = repeatAfter
     }
     
-    public init(status: Bool, name: String, owner: String) {
+    public init(status: Bool, name: String, owner: String, date: String, repeatAfter: Int) {
         
         self.uid = "0"
         self.name = name
         self.status = status
         self.owner = owner
+        self.date = date
+        self.repeatAfter = repeatAfter
     }
     
 }

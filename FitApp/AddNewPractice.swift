@@ -12,6 +12,7 @@ import UIKit
 class AddNewPractice: UIViewController {
     //var createdExercise = [String]()
     var chosenExercises = [String]()
+    var selectedFriends = [String:String]()
     @IBOutlet weak var PracticeNameTextField: UITextField!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBAction func cancelAddPractice(_ sender: UIBarButtonItem) {
@@ -27,17 +28,18 @@ class AddNewPractice: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(setChosenExercises(notification:)), name: .chosenExercise, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setChosenFriends(notification:)), name: .chosenfriends, object: nil)
         datePicker.maximumDate = Date()
         print(chosenExercises)
         
         
     }
     
-    private func preparePractice (name: String, status: Bool, owner: String ) -> Practice {
+  /*  private func preparePractice (name: String, status: Bool, owner: String, date) -> Practice {
         let newPractice = Practice(status: status, name: name,  owner: owner)
         return newPractice
     }
-    
+    */
     private func postPractice(practice: Practice) {
         
     }
@@ -47,8 +49,19 @@ class AddNewPractice: UIViewController {
             let addNewExercise: AddNewExercise = segue.destination as! AddNewExercise
             addNewExercise.flagConnectionIds = false
         }
+        if segue.identifier == "selectFriends" {
+            let navController = segue.destination as! UINavigationController
+            let friendList = navController.topViewController as! Friends
+            friendList.flagCreateNewPractice = true
+            friendList.chosenFriends = self.selectedFriends
+
+        }
     }
-    
+    @objc func setChosenFriends(notification: Notification) {
+        if let data = notification.userInfo as? [String:String] {
+            self.selectedFriends = data
+        }
+    }
     
     
     @objc func setChosenExercises(notification: Notification) {
@@ -64,4 +77,5 @@ class AddNewPractice: UIViewController {
 }
 extension Notification.Name {
     static let chosenExercise = Notification.Name("chosenExercise")
+    static let chosenfriends = Notification.Name("chosenFriends")
 }

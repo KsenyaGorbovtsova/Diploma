@@ -100,14 +100,14 @@ class ProfileController: UIViewController {
        
         if self.flagUserOrFriend == false && self.flagAddedFriend == false {
             self.addOrDeleteFriendToUser(idFriend: self.idFriend, action: "Add")
-             NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+            // NotificationCenter.default.post(name: .reloadListFriend, object: nil)
             dismiss(animated: true, completion: nil)
             
             
         }
         else if self.flagUserOrFriend == false && self.flagAddedFriend == true {
             self.addOrDeleteFriendToUser(idFriend: self.idFriend, action: "Delete")
-            NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+            //NotificationCenter.default.post(name: .reloadListFriend, object: nil)
              dismiss(animated: true, completion: nil)
            
         }
@@ -246,9 +246,8 @@ class ProfileController: UIViewController {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         let task = URLSession.shared.dataTask(with: request as URLRequest)
-       
         task.resume()
-        
+        NotificationCenter.default.post(name: .reloadListFriend, object: nil)
     }
     
 }
@@ -257,3 +256,4 @@ extension ProfileController: PickerDelegate {
         self.imageView.image = image
     }
 }
+
