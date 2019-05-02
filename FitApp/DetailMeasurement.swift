@@ -1,96 +1,68 @@
 //
-//  DetailApparatus.swift
+//  DetailMeasurement.swift
 //  FitApp
 //
-//  Created by Gorbovtsova Ksenya on 29/04/2019.
+//  Created by Gorbovtsova Ksenya on 03/05/2019.
 //  Copyright © 2019 Gorbovtsova Ksenya. All rights reserved.
 //
 
 import UIKit
 import SwiftKeychainWrapper
-class DetailApparatus: UIViewController {
+
+class  DetailMeasurement: UIViewController {
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var nameTextLabel: UITextField!
+    @IBOutlet weak var actionButton: UIButton!
     let spinner = UIActivityIndicatorView(style: .gray)
     var name = String()
     var flagCreateNew = false
     var flagShow = false
-    var imageSegue = Data()
-    var showApparatusId = [String:String]()
-    var newApparatusId = [String:String]()
-    @IBOutlet weak var imageApparatus: UIImageView!
-    @IBOutlet weak var addImageButton: UIButton!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var nameTextLabel: UITextField!
-    @IBOutlet weak var saveButton: UIButton!
-    var photoPicker: PhotoPicker!
-    
-    @IBAction func addImageButton(_ sender: UIButton) {
-        self.photoPicker.present(from: sender)
-    }
-    
+    var showMentId = [String:String]()
+    var newMentId = [String:String]()
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.flagShow == true {
-            self.addImageButton.isHidden = true
-            self.nameTextLabel.isHidden = true
             self.nameLabel.isHidden = false
+            self.nameTextLabel.isHidden = true
             self.nameLabel.text = self.name
-            self.saveButton.isHidden = false
-             self.saveButton.setTitle("Выбрать", for: .normal)
+            self.actionButton.setTitle("Выбрать", for: .normal)
         }
         else {
-            self.addImageButton.isHidden = false
-            self.photoPicker = PhotoPicker(presentationController: self, delegate: self)
-            self.nameTextLabel.isHidden = false
             self.nameLabel.isHidden = true
-            self.saveButton.isHidden = false
-            self.saveButton.setTitle("Сохранить", for: .normal)
-        }
-        if self.imageSegue.count == 0 {
-            self.imageApparatus.image = UIImage(named: "noImage")
-        }
-        else {
-            let imageData = Data.init(base64Encoded: self.imageSegue, options: .init(rawValue: 0))
-            self.imageApparatus.image = UIImage(data: imageData!)
+            self.nameTextLabel.isHidden = false
+            self.actionButton.setTitle("Сохранить", for: .normal)
         }
     }
     
     
-    @IBAction func saveButtonClicked(_ sender: UIButton) {
+    @IBAction func actionButtonClecked(_ sender: UIButton) {
         if self.flagShow == false {
-        self.spinner.color = UIColor.green
-        self.spinner.center = view.center
-        self.spinner.hidesWhenStopped = false
-        self.spinner.startAnimating()
-        view.addSubview(self.spinner)
-        self.postApparatus()
+            self.spinner.color = UIColor.green
+            self.spinner.center = view.center
+            self.spinner.hidesWhenStopped = false
+            self.spinner.startAnimating()
+            view.addSubview(self.spinner)
+            self.postMent()
         }
         else {
-             NotificationCenter.default.post(name: .apparatusId, object: nil, userInfo: self.showApparatusId)
-             dismiss(animated: true, completion: nil)
+            NotificationCenter.default.post(name: .measurementId, object: nil, userInfo: self.showMentId)
+            dismiss(animated: true, completion: nil)
         }
     }
-    private func postApparatus() {
+    private func postMent() {
         var params = [String:Any]()
         if let newName = self.nameTextLabel.text {
             params["name"] = newName
         }
-        if self.imageApparatus.image == nil {
-            self.imageApparatus.image = UIImage(named: "noImage")
-        }
+        
         if params["name"] as? String == ""{
             self.stopSpinner(spinner: self.spinner)
             self.DisplayWarnining(warning: "Заполните поле \"название\"", title: "Недостаточно информации", dismissing: false, numButtons: 1)
             return
         }
-        let newImage:NSData = self.imageApparatus.image!.jpegData(compressionQuality: 0.5)! as NSData
-        
-        let imageString = newImage.base64EncodedString(options: .init(rawValue: 0))
-        
-        params["image"] = imageString
-        
-        
-         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
-        let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/apparatuses/create")!
+        let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/measureunits")!
         var request = URLRequest(url:url)
         request.httpMethod = "POST"
         if var key = accessToken {
@@ -113,14 +85,16 @@ class DetailApparatus: UIViewController {
                 return
             }
             do {
-
-              if let json = try JSONSerialization.jsonObject(with: data) as? [String:String] {
+                
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String:String] {
                     print(json)
-                    self.newApparatusId = ["0": json["id"] ?? ""]
-                    self.DisplayWarnining(warning: "Новое оборудование создано", title: "Добавить его к упражнению?", dismissing: true, numButtons: 2)
+                    self.newMentId = ["0": json["id"] ?? ""]
+                    self.DisplayWarnining(warning: "Новый параметр создан", title: "Добавить его к упражнению?", dismissing: true, numButtons: 2)
+                } else {
+                     self.DisplayWarnining(warning: "Попробуйте еще раз", title: "Сервер козлит", dismissing: false, numButtons: 1)
                 }
                 
- 
+                
             }
             catch let error {
                 print(error.localizedDescription)
@@ -129,7 +103,6 @@ class DetailApparatus: UIViewController {
         }
         dataTask.resume()
     }
-    
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {
             self.spinner.stopAnimating()
@@ -152,7 +125,7 @@ class DetailApparatus: UIViewController {
             let agreeAction = UIAlertAction(title: "Да", style: .default)
             { (action: UIAlertAction!) in
                 DispatchQueue.main.async {
-                    NotificationCenter.default.post(name: .apparatusId, object: nil, userInfo: self.newApparatusId)
+                    NotificationCenter.default.post(name: .measurementId, object: nil, userInfo: self.newMentId)
                     warningController.dismiss(animated: true, completion: nil)
                     if dismissing == true {
                         self.dismiss(animated: true, completion: nil)
@@ -169,7 +142,7 @@ class DetailApparatus: UIViewController {
                 }
             }
             if numButtons == 1 {
-               warningController.addAction(buttonAction)
+                warningController.addAction(buttonAction)
             }
             else {
                 warningController.addAction(agreeAction)
@@ -179,9 +152,5 @@ class DetailApparatus: UIViewController {
         }
         
     }
-}
-extension DetailApparatus: PickerDelegate{
-    func didSelect(image: UIImage?) {
-        self.imageApparatus.image = image
-    }
+    
 }

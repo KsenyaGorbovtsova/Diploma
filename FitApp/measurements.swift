@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Mesurements: NSObject {
+class Measurements: NSObject {
     
     var uid: String
     var name: String

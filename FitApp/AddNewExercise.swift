@@ -17,6 +17,7 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var idOfCreatedExercise: String = ""
     var idOfEditedExercise = ""
     var apparatusId = String()
+    var measurementId = String()
     @IBOutlet weak var checkBoxStatus: UIButton!
     
     @IBAction func checkBoxStatus(_ sender: UIButton) {
@@ -48,13 +49,16 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             if self.apparatusId == "" {
                 self.apparatusId = "5F067340-E82A-4362-A2FD-11E3AD7C4F8D"
             }
-            let measureId = "C7960E44-36B0-46FB-8FA4-1BFCFA2F28CF"
+        if self.measurementId == "" {
+            self.measurementId = "BA5258F3-FC50-44C8-9271-4C9B18BE7835"
+        }
+        
             let numMeasure = Int(self.numMeasureTextField.text ?? "") ?? 0
             /*var status = false
              if self.checkBoxStatus.isSelected == true {
              status = true
              }*/
-            let exerciseToSave = self.prepareExercise(name: name, numTry: self.numTry, numRep: self.numRep, apparatusId: self.apparatusId, measureUnitId: measureId, status: self.checkBoxStatus.isSelected, numMeasure: numMeasure)
+            let exerciseToSave = self.prepareExercise(name: name, numTry: self.numTry, numRep: self.numRep, apparatusId: self.apparatusId, measureUnitId: self.measurementId, status: self.checkBoxStatus.isSelected, numMeasure: numMeasure)
                 self.postExercise(exercise: exerciseToSave)
             NotificationCenter.default.post(name: .reloadListExr, object: nil)
             self.dismiss(animated: true, completion: nil)
@@ -72,6 +76,7 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(addApparatusId(notification:)), name: .apparatusId, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addMeasurementId(notification:)), name: .measurementId, object: nil)
         //self.checkBoxStatus.isSelected = false
         let image = UIImage(named: "box") as UIImage?
         self.checkBoxStatus.layer.cornerRadius = self.checkBoxStatus.bounds.size.width / 2
@@ -199,6 +204,12 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             let apparatusList = navController.topViewController as!  ListApparatus
             apparatusList.chosenApparatus = self.apparatusId
         }
+        if segue.identifier == "addMeasurement"{
+            let navController = segue.destination as! UINavigationController
+            let mentList = navController.topViewController as!  ListMeasurements
+            mentList.chosenMeasurement = self.measurementId
+        }
+        
     }
     private func deleteExerciseFromPractice(practiceId: String, exerciseId: String) {
         //let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
@@ -246,9 +257,17 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             print(self.apparatusId)
         }
     }
-    
+    @objc func addMeasurementId (notification: Notification) {
+        if let data = notification.userInfo as? [String:String] {
+            for x in data {
+                self.measurementId = x.value
+            }
+            print(self.measurementId)
+        }
+    }
 }
 
 extension Notification.Name {
     static let apparatusId = Notification.Name("apparatusId")
+    static let measurementId = Notification.Name("measurementId")
 }

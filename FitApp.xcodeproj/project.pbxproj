@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E132A01227B9260006829EB /* ListMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E132A00227B9260006829EB /* ListMeasurements.swift */; };
+		9E132A03227B95A5006829EB /* DetailMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E132A02227B95A5006829EB /* DetailMeasurement.swift */; };
 		9E1614BE22311A14002E167C /* AddNewPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1614BD22311A14002E167C /* AddNewPractice.swift */; };
 		9E23937C2247E65E00DB4FBB /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937B2247E65E00DB4FBB /* SignInController.swift */; };
 		9E23937E2247E67200DB4FBB /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937D2247E67200DB4FBB /* SignUpController.swift */; };
@@ -36,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		90D946D123EFF6C5632377EB /* Pods-FitApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FitApp.debug.xcconfig"; path = "Target Support Files/Pods-FitApp/Pods-FitApp.debug.xcconfig"; sourceTree = "<group>"; };
+		9E132A00227B9260006829EB /* ListMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListMeasurements.swift; sourceTree = "<group>"; };
+		9E132A02227B95A5006829EB /* DetailMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMeasurement.swift; sourceTree = "<group>"; };
 		9E1614BD22311A14002E167C /* AddNewPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPractice.swift; sourceTree = "<group>"; };
 		9E23937B2247E65E00DB4FBB /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		9E23937D2247E67200DB4FBB /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 				9E2BEFB1227736C900F4C8DA /* ListApparartus.swift */,
 				9E2BEFAD22772FD400F4C8DA /* Apparatus.swift */,
 				9E2BEFAF2277333A00F4C8DA /* measurements.swift */,
+				9E132A00227B9260006829EB /* ListMeasurements.swift */,
+				9E132A02227B95A5006829EB /* DetailMeasurement.swift */,
 				9E288A7D2263827300DD9140 /* FriendsController.swift */,
 				9E698565222D6C730004A54A /* AddNewExercise.swift */,
 				9E23937F2247F08A00DB4FBB /* User.swift */,
@@ -270,9 +276,11 @@
 				9E2BEFB02277333A00F4C8DA /* measurements.swift in Sources */,
 				9EB0B84722240EB3008BF8EF /* Practice.swift in Sources */,
 				9EB0B84322240D04008BF8EF /* DetailPractice.swift in Sources */,
+				9E132A03227B95A5006829EB /* DetailMeasurement.swift in Sources */,
 				9EE4E6A422293583007337E4 /* DetailExercise.swift in Sources */,
 				9EF758A7217E1C670033ACC1 /* ViewController.swift in Sources */,
 				9EF758AD217E1C670033ACC1 /* FitApp.xcdatamodeld in Sources */,
+				9E132A01227B9260006829EB /* ListMeasurements.swift in Sources */,
 				9E288A80226C8E6000DD9140 /* ProfileController.swift in Sources */,
 				9E2393802247F08A00DB4FBB /* User.swift in Sources */,
 				9E1614BE22311A14002E167C /* AddNewPractice.swift in Sources */,
