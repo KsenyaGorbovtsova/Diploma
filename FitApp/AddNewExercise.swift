@@ -18,33 +18,20 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var idOfEditedExercise = ""
     var apparatusId = String()
     var measurementId = String()
-    @IBOutlet weak var checkBoxStatus: UIButton!
+   var editPermission = true
     
-    @IBAction func checkBoxStatus(_ sender: UIButton) {
-        
-        if (checkBoxStatus.isSelected == true) {
-            let image = UIImage(named: "box") as UIImage?
-            checkBoxStatus.layer.cornerRadius = self.checkBoxStatus.bounds.size.width / 2
-            checkBoxStatus.setBackgroundImage(image, for: UIControl.State.normal)
-            checkBoxStatus.isSelected = false
-        } else {
-            let image = UIImage(named: "checkbox") as UIImage?
-            checkBoxStatus.setBackgroundImage(image, for: UIControl.State.normal)
-            checkBoxStatus.layer.cornerRadius = self.checkBoxStatus.bounds.size.width / 2
-            checkBoxStatus.isSelected = true
-            print(checkBoxStatus.isSelected)
-        }
-        
-    }
+    
+    @IBOutlet weak var switchEdit: UISwitch!
+    
+    @IBOutlet weak var saveExercise: UIButton!
     
     @IBOutlet weak var numMeasureTextField: UITextField!
     @IBOutlet weak var exerciseNameTextfield: UITextField!
-    @IBAction func cancelAddExercise(_ sender: UIBarButtonItem) {
+   /* @IBAction func cancelAddExercise(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
-    }
-    @IBAction func saveExercise(_ sender: UIBarButtonItem) {
-        
-        
+    }*/
+    @IBAction func saveExercise(_ sender: UIButton) {
+ 
             let name = self.exerciseNameTextfield.text ?? ""
             if self.apparatusId == "" {
                 self.apparatusId = "5F067340-E82A-4362-A2FD-11E3AD7C4F8D"
@@ -58,14 +45,10 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
              if self.checkBoxStatus.isSelected == true {
              status = true
              }*/
-            let exerciseToSave = self.prepareExercise(name: name, numTry: self.numTry, numRep: self.numRep, apparatusId: self.apparatusId, measureUnitId: self.measurementId, status: self.checkBoxStatus.isSelected, numMeasure: numMeasure)
+            let exerciseToSave = self.prepareExercise(name: name, numTry: self.numTry, numRep: self.numRep, apparatusId: self.apparatusId, measureUnitId: self.measurementId, status: self.editPermission, numMeasure: numMeasure)
                 self.postExercise(exercise: exerciseToSave)
             NotificationCenter.default.post(name: .reloadListExr, object: nil)
-            self.dismiss(animated: true, completion: nil)
-       
-        
-        
-        
+            self.navigationController?.popViewController(animated: true)
     }
     
     @IBOutlet weak var picker: UIPickerView!
@@ -75,12 +58,16 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.prefersLargeTitles = true
+        self.saveExercise.layer.cornerRadius = 5
+        self.saveExercise.backgroundColor = UIColor(displayP3Red: 0.30, green:0.85,blue:0.39, alpha:1.0)
+        self.saveExercise.setTitleColor(UIColor.white, for: .normal)
+        self.exerciseNameTextfield.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+        self.numMeasureTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
         NotificationCenter.default.addObserver(self, selector: #selector(addApparatusId(notification:)), name: .apparatusId, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addMeasurementId(notification:)), name: .measurementId, object: nil)
-        //self.checkBoxStatus.isSelected = false
+        self.switchEdit.addTarget(self, action: #selector(self.switchIsChanged(_:)), for: UIControl.Event.valueChanged)
         let image = UIImage(named: "box") as UIImage?
-        self.checkBoxStatus.layer.cornerRadius = self.checkBoxStatus.bounds.size.width / 2
-        self.checkBoxStatus.setBackgroundImage(image, for: UIControl.State.normal)
         let arr = (0...100).map {"\($0)"}
         self.pickerData.append(arr)
         self.pickerData.append(arr)
@@ -227,6 +214,13 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         //request.addValue("Bearer \(String(describing: accessToken))", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request)
         task.resume()
+    }
+    @objc func switchIsChanged(_: UISwitch) {
+        if self.switchEdit.isOn {
+            self.editPermission  = true
+        } else {
+            self.editPermission = false
+        }
     }
     
     func DisplayWarnining (warning: String, title: String) -> Void {

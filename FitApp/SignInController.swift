@@ -12,6 +12,7 @@ import SwiftKeychainWrapper
 
 class SignIn: UIViewController {
     
+    @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var pswdTextField: UITextField!
     let spinner = UIActivityIndicatorView(style: .gray)
@@ -32,6 +33,18 @@ class SignIn: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        let sub = Gradient()
+        view.layer.insertSublayer(sub.setGradient(view: self.view), at: 0)
+        self.emailTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+        self.pswdTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+        self.signInButton.layer.cornerRadius = 5
+        
+        
+        
     }
     
     private func login (email: String, password: String) {
@@ -75,7 +88,7 @@ class SignIn: UIViewController {
                             return
                         }
                         DispatchQueue.main.async {
-                            let mainPage = self.storyboard?.instantiateViewController(withIdentifier: "mainPageNav") as! UINavigationController
+                            let mainPage = self.storyboard?.instantiateViewController(withIdentifier: "mainPageNav") as! UITabBarController
                             let appdelegate = UIApplication.shared.delegate
                             appdelegate?.window??.rootViewController = mainPage
                         }

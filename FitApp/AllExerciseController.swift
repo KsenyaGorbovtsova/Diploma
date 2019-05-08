@@ -19,10 +19,21 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     var tappededit = false
     var preparation = [Exercise]()
     var detailExerFlag = false
-    
+    var tabBar = true
+    @IBOutlet weak var doneButton: UIBarButtonItem!
+    @IBOutlet weak var editButton: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if self.tabBar == true {
+            //self.navigationItem.rightBarButtonItem = nil
+           // self.navigationItem.leftBarButtonItem = nil
+            self.navigationItem.rightBarButtonItems = nil
+            
+        } else
+        {
+             self.navigationItem.rightBarButtonItems = [self.doneButton, self.editButton]
+        }
+         navigationController?.navigationBar.prefersLargeTitles = true
         resultSearch.searchResultsUpdater = self
         resultSearch.obscuresBackgroundDuringPresentation = false
         resultSearch.searchBar.placeholder = "Search Exercises"
@@ -34,7 +45,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         tableView.dataSource = self
         tableView.delegate = self
         tableView.allowsMultipleSelection = true
-        
+       
         requestExercises()
         
     }
@@ -150,12 +161,18 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllExerciseCell", for: indexPath)
+        
         if self.tappededit == false && !isFiltering() {
             let exercise: Exercise = self.exerciseList[indexPath.row]
             cell.textLabel?.text = exercise.name
+            if self.tabBarController != nil {
+                cell.selectionStyle = .none
+                cell.accessoryType = .none
+            } else {
             let selectedIndexPaths = tableView.indexPathsForSelectedRows
             let rowIsSelected = selectedIndexPaths != nil && selectedIndexPaths!.contains(indexPath)
             cell.accessoryType = rowIsSelected ? .checkmark : .none
+            }
             return cell
         }
         else if self.tappededit == false && isFiltering() {
@@ -180,11 +197,25 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath)!
-        cell.accessoryType = .checkmark
-        
+         let cell = tableView.cellForRow(at: indexPath)!
+        if self.tabBar == true {
+            let cell = tableView.cellForRow(at: indexPath)!
+            cell.selectionStyle = .none
+             cell.accessoryType = .none
+            performSegue(withIdentifier: "showFromFirstTab", sender: indexPath.row)
+        }else {
+            cell.accessoryType = .checkmark
+        }
     }
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showFromFirstTab" {
+            //let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
+            let exercise = self.exerciseList[sender as! Int]
+            let showExr: DetailExercise = segue.destination as! DetailExercise
+            showExr.exercise = exercise
+            showExr.flagBar = true
+        }
+    }
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)!
         cell.accessoryType = .none

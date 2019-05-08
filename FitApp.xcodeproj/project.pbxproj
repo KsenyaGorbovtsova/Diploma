@@ -10,6 +10,7 @@
 		9E132A01227B9260006829EB /* ListMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E132A00227B9260006829EB /* ListMeasurements.swift */; };
 		9E132A03227B95A5006829EB /* DetailMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E132A02227B95A5006829EB /* DetailMeasurement.swift */; };
 		9E1614BE22311A14002E167C /* AddNewPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1614BD22311A14002E167C /* AddNewPractice.swift */; };
+		9E176905227F44D9001F63CC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E176904227F44D9001F63CC /* TabBarController.swift */; };
 		9E23937C2247E65E00DB4FBB /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937B2247E65E00DB4FBB /* SignInController.swift */; };
 		9E23937E2247E67200DB4FBB /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937D2247E67200DB4FBB /* SignUpController.swift */; };
 		9E2393802247F08A00DB4FBB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937F2247F08A00DB4FBB /* User.swift */; };
@@ -28,6 +29,8 @@
 		9EB0B84722240EB3008BF8EF /* Practice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB0B84622240EB3008BF8EF /* Practice.swift */; };
 		9EE4E6A222291A23007337E4 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE4E6A122291A23007337E4 /* Exercise.swift */; };
 		9EE4E6A422293583007337E4 /* DetailExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE4E6A322293583007337E4 /* DetailExercise.swift */; };
+		9EEE06D5227E12C3005F3020 /* gradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEE06D4227E12C3005F3020 /* gradientLayer.swift */; };
+		9EEE06D7227E195D005F3020 /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EEE06D6227E195D005F3020 /* LaunchScreen.swift */; };
 		9EF758A5217E1C670033ACC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF758A4217E1C670033ACC1 /* AppDelegate.swift */; };
 		9EF758A7217E1C670033ACC1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EF758A6217E1C670033ACC1 /* ViewController.swift */; };
 		9EF758AA217E1C670033ACC1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9EF758A8217E1C670033ACC1 /* Main.storyboard */; };
@@ -41,6 +44,7 @@
 		9E132A00227B9260006829EB /* ListMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListMeasurements.swift; sourceTree = "<group>"; };
 		9E132A02227B95A5006829EB /* DetailMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMeasurement.swift; sourceTree = "<group>"; };
 		9E1614BD22311A14002E167C /* AddNewPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPractice.swift; sourceTree = "<group>"; };
+		9E176904227F44D9001F63CC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9E23937B2247E65E00DB4FBB /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		9E23937D2247E67200DB4FBB /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		9E23937F2247F08A00DB4FBB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -58,6 +62,8 @@
 		9EB0B84622240EB3008BF8EF /* Practice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Practice.swift; sourceTree = "<group>"; };
 		9EE4E6A122291A23007337E4 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
 		9EE4E6A322293583007337E4 /* DetailExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailExercise.swift; sourceTree = "<group>"; };
+		9EEE06D4227E12C3005F3020 /* gradientLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gradientLayer.swift; sourceTree = "<group>"; };
+		9EEE06D6227E195D005F3020 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		9EF758A1217E1C670033ACC1 /* FitApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EF758A4217E1C670033ACC1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9EF758A6217E1C670033ACC1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -114,11 +120,14 @@
 				9EB0B84622240EB3008BF8EF /* Practice.swift */,
 				9EE4E6A122291A23007337E4 /* Exercise.swift */,
 				9EF758A8217E1C670033ACC1 /* Main.storyboard */,
+				9E176904227F44D9001F63CC /* TabBarController.swift */,
 				9E288A7F226C8E6000DD9140 /* ProfileController.swift */,
 				9E2BEFB32277684400F4C8DA /* DetailApparatus.swift */,
 				9E7A5A7B226E363100303E06 /* photoPicker.swift */,
 				9E2BEFB1227736C900F4C8DA /* ListApparartus.swift */,
 				9E2BEFAD22772FD400F4C8DA /* Apparatus.swift */,
+				9EEE06D4227E12C3005F3020 /* gradientLayer.swift */,
+				9EEE06D6227E195D005F3020 /* LaunchScreen.swift */,
 				9E2BEFAF2277333A00F4C8DA /* measurements.swift */,
 				9E132A00227B9260006829EB /* ListMeasurements.swift */,
 				9E132A02227B95A5006829EB /* DetailMeasurement.swift */,
@@ -272,6 +281,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E23937E2247E67200DB4FBB /* SignUpController.swift in Sources */,
+				9E176905227F44D9001F63CC /* TabBarController.swift in Sources */,
+				9EEE06D5227E12C3005F3020 /* gradientLayer.swift in Sources */,
 				9E288A7E2263827300DD9140 /* FriendsController.swift in Sources */,
 				9E2BEFB02277333A00F4C8DA /* measurements.swift in Sources */,
 				9EB0B84722240EB3008BF8EF /* Practice.swift in Sources */,
@@ -292,6 +303,7 @@
 				9E2BEFB42277684400F4C8DA /* DetailApparatus.swift in Sources */,
 				9EE4E6A222291A23007337E4 /* Exercise.swift in Sources */,
 				9E23937C2247E65E00DB4FBB /* SignInController.swift in Sources */,
+				9EEE06D7227E195D005F3020 /* LaunchScreen.swift in Sources */,
 				9E56276D2237A52C00AE566A /* AllExerciseController.swift in Sources */,
 				9EB0B84522240DD2008BF8EF /* ListPractice.swift in Sources */,
 			);

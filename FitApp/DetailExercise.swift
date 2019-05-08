@@ -6,14 +6,19 @@
 //  Copyright © 2019 Gorbovtsova Ksenya. All rights reserved.
 //
 
-import Foundation
+import SwiftKeychainWrapper
 import UIKit
 
 class DetailExercise: UIViewController {
     
+    
+    @IBOutlet weak var imageView: UIImageView!
     var exercise: Exercise!
     var practiceId = ""
-    
+    var flagBar = false
+    var nameApparatus = String()
+    var nameMeasurement = String()
+    var imageApparatus = Data()
     @IBOutlet weak var nameExercise: UILabel!
     
     @IBOutlet weak var measure_Unitlabel: UILabel!
@@ -28,24 +33,123 @@ class DetailExercise: UIViewController {
     }
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.requestApparatus(apparatusId: self.exercise.apparatusId)
+        self.requestMeasurement(measurementId: self.exercise.measureUnitId)
+        sleep(10)
+        if self.flagBar == true {
+            self.navigationItem.rightBarButtonItem = nil
+            self.title = self.exercise.name
+            self.nameExercise.isHidden = true
+        }
+        else {
+            self.nameExercise.isHidden = false
+        }
         if self.exercise.status == false {
             self.editButton.isEnabled = false
             
         }
         
+        
         if exercise != nil {
+            
             self.nameExercise.text = exercise.name
             self.num_repLabel.text = String(exercise.num_rep)
             self.num_tryLabel.text = String(exercise.num_try)
-            self.apparatusLabel.text = exercise.apparatusId
+            self.apparatusLabel.text = self.nameApparatus
+              let imageData = Data.init(base64Encoded: self.imageApparatus, options: .init(rawValue: 0))
+            self.imageView.image = UIImage(data: (imageData ?? (UIImage(named: "noImage")?.pngData())!)) ??  UIImage(named: "noImage")
             self.num_measureLabel.text = String(exercise.num_measure)
-            self.measure_Unitlabel.text = String(exercise.measureUnitId)
+            self.measure_Unitlabel.text = self.nameMeasurement
         }
         
     }
+    private func requestMeasurement(measurementId: String) {
+        let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/measureunits/" + measurementId)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        if var key = accessToken {
+            key = "Bearer " + key
+            request.setValue(key, forHTTPHeaderField: "Authorization")
+        }
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard error == nil else {
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            do {
+                print(data)
+                let jsonObject = try JSONSerialization.jsonObject(with: data)
+                if let dict =  jsonObject as? Dictionary<String, String> {
+                    print(dict)
+                    self.nameMeasurement = dict["name"] ?? "Без названия"
+                }
+                else {
+                    print("no")
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        dataTask.resume()
+    }
+    private func requestApparatus(apparatusId: String) {
+       // var newApparatus = Apparatus.self
+        let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/apparatuses/" + apparatusId )!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        if var key = accessToken {
+            key = "Bearer " + key
+            request.setValue(key, forHTTPHeaderField: "Authorization")
+        }
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard error == nil else {
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            do {
+                print(data)
+                let jsonObject = try JSONSerialization.jsonObject(with: data)
+                
+               // if jsonObject as? Dictionary<String, String> != nil {
+                    if let dict =  jsonObject as? Dictionary<String, String> {
+                    print(dict)
+                    self.nameApparatus = dict["name"] ?? "Без названия"
+                    if let image = dict["image"] {
+                    self.imageApparatus = Data(image.utf8)
+                        }
+                    }
+                    else {
+                        print("no")
+                    }
+               
+            } catch let error {
+                print(error.localizedDescription)
+            }
+            
+        }
+        dataTask.resume()
     
+        
+    }
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if self.flagBar == true {
+            return false
+        } else {
+            return true
+        }
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "editExercise" {
             let addExercise: AddNewExercise = segue.destination as! AddNewExercise

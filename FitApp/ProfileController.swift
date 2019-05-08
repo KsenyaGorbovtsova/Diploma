@@ -11,10 +11,8 @@ import UIKit
 
 class ProfileController: UIViewController {
     let spinner = UIActivityIndicatorView(style: .gray)
-    var firstNameSegue = ""
-    var secondNameSegue = ""
-    var emailSegue = ""
-    var imageSegue = Data()
+    var userData = User()
+    var fromFriend = false
     @IBOutlet weak var secondNameTextField: UITextField!
     @IBOutlet weak var firstNameTextField: UITextField!
     
@@ -24,7 +22,7 @@ class ProfileController: UIViewController {
     @IBOutlet weak var emaiTextField: UITextField!
     
     @IBOutlet weak var emailLabel: UILabel!
-    @IBOutlet weak var rightButton: UIBarButtonItem!
+   
     
     @IBOutlet weak var newPswdLine: UILabel!
     
@@ -42,17 +40,28 @@ class ProfileController: UIViewController {
     var flagUserOrFriend = false // user - true, friend - false
     var flagAddedFriend = false // friend from filteredData - false, friend from friendList - true
     
+    @IBOutlet weak var SignOutButton: UIButton!
     @IBAction func photoPickerClicked(_ sender: UIButton) {
         self.photoPicker.present(from: sender)
     }
     
     @IBOutlet weak var photoPickerButton: UIButton!
     
+    @IBOutlet weak var addOrDeleteFriend: UIButton!
+    
+    override func viewWillAppear(_ animated: Bool) {
+    }
+    
+    @IBOutlet weak var zamer: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if self.flagUserOrFriend == false {
+         navigationController?.navigationBar.prefersLargeTitles = true
+        if self.fromFriend == true {
+       // if self.tabBarController == nil{
+            self.title = "Профиль"
+            self.zamer.isHidden = true
             self.firstNameLabel.text = self.firstName
             self.secondNameLabel.text = self.secondName
             self.emailLabel.text = self.email
@@ -63,37 +72,103 @@ class ProfileController: UIViewController {
             self.pswdTextField.isHidden = true
             self.confirmpswdTextField.isHidden = true
             if self.flagAddedFriend == false {
-                self.rightButton.title = "Добавить"
+                self.addOrDeleteFriend.setTitle("Добавить", for: .normal)
+                self.addOrDeleteFriend.layer.cornerRadius = 5
+                self.addOrDeleteFriend.backgroundColor = UIColor(displayP3Red: 0.30, green:0.85,blue:0.39, alpha:1.0)
+                self.addOrDeleteFriend.setTitleColor(UIColor.white, for: .normal)
                 
             }
             else {
-                 self.rightButton.title = "Удалить"
+                 self.addOrDeleteFriend.setTitle("Удалить", for: .normal)
+                self.addOrDeleteFriend.layer.cornerRadius = 5
+                self.addOrDeleteFriend.backgroundColor = UIColor(displayP3Red: 1.00, green:0.23, blue:0.19, alpha:1.0)
+                self.addOrDeleteFriend.setTitleColor(UIColor.white, for: .normal)
+                
             }
             self.confirmPswdLine.isHidden = true
             self.newPswdLine.isHidden = true
             self.photoPickerButton.isHidden = true
+            self.SignOutButton.isHidden = true
             
         }
         else {
+            
+            self.spinner.color = UIColor.green
+            self.spinner.center = view.center
+            self.spinner.hidesWhenStopped = false
+            self.spinner.startAnimating()
+            view.addSubview(self.spinner)
+            self.requestUserData()
+            sleep(20)
+            self.title = "Личный кабинет"
+            NotificationCenter.default.addObserver(self, selector: #selector(reloadUserData(notification:)), name: .updateInfo, object: nil)
             self.photoPickerButton.isHidden = false
+            self.zamer.isHidden = false
             self.photoPicker = PhotoPicker(presentationController: self, delegate: self)
-            if self.imageSegue.count == 0 {
-                self.imageSegue = (UIImage(named: "noPhoto")?.pngData())!
-            }
-            let imageData = Data.init(base64Encoded: self.imageSegue, options: .init(rawValue: 0))
-            self.imageView.image = UIImage(data: imageData!)
+            
+           /*if self.userData.image.count == 0 {
+                self.userData.image = (UIImage(named: "noPhoto")?.pngData())!
+                self.requestUserData()
+            }*/
+            let imageData = Data.init(base64Encoded: self.userData.image, options: .init(rawValue: 0))
+            self.imageView.image = UIImage(data: (imageData ?? (UIImage(named: "noPhoto")?.pngData())!)) ??  UIImage(named: "noPhoto")
+            //self.imageView.image = UIImage(data: Data.init(base64Encoded: self.imageSegue, options: .init(rawValue: 0))!)
             self.emailLabel.isHidden = true
             self.firstNameLabel.isHidden = true
+            self.firstNameTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
             self.secondNameLabel.isHidden = true
             self.firstNameTextField.isHidden = false
-            self.firstNameTextField.text = self.firstNameSegue
+            self.firstNameTextField.text = self.userData.firstName
             self.secondNameTextField.isHidden = false
-            self.secondNameTextField.text = self.secondNameSegue
+            self.secondNameTextField.text = self.userData.secondName
+            self.secondNameTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
             self.emaiTextField.isHidden = false
-            self.emaiTextField.text = self.emailSegue
-            self.pswdTextField.isHidden = false
+            self.emaiTextField.text = self.userData.email
+            self.emaiTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+            self.pswdTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
             self.confirmpswdTextField.isHidden = false
-            self.rightButton.title = "Сохранить"
+           self.confirmpswdTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+             self.addOrDeleteFriend.setTitle("Сохранить", for: .normal)
+            self.addOrDeleteFriend.layer.cornerRadius = 5
+            self.addOrDeleteFriend.backgroundColor = UIColor(displayP3Red: 0.30, green:0.85, blue:0.39, alpha:1.0)
+            
+            self.SignOutButton.isHidden = false
+        }
+    }
+    
+    @IBAction func signOut(_ sender: UIButton) {
+        KeychainWrapper.standard.removeObject(forKey: "accessToken")
+        KeychainWrapper.standard.removeObject(forKey: "userId")
+        
+        let signInPage = self.storyboard?.instantiateViewController(withIdentifier: "signInNav") as! UINavigationController
+        let appDelegate = UIApplication.shared.delegate
+        appDelegate?.window??.rootViewController = signInPage
+    }
+    
+    @IBAction func addOrDeleteButtom(_ sender: UIButton) {
+        if self.fromFriend == true  && self.flagAddedFriend == false {
+            self.addOrDeleteFriendToUser(idFriend: self.idFriend, action: "Add")
+            NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+            navigationController?.popViewController(animated: true)
+            dismiss(animated: true, completion: nil)
+            
+            
+        }
+        else  if self.fromFriend == true  && self.flagAddedFriend == true {
+            self.addOrDeleteFriendToUser(idFriend: self.idFriend, action: "Delete")
+            NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+            navigationController?.popViewController(animated: true)
+            dismiss(animated: true, completion: nil)
+            
+        }
+        else {
+            self.spinner.color = UIColor.green
+            self.spinner.center = view.center
+            self.spinner.hidesWhenStopped = false
+            self.spinner.startAnimating()
+            view.addSubview(self.spinner)
+            self.updateUserInformation()
+            NotificationCenter.default.post(name: .updateInfo, object: nil)
         }
     }
     @IBAction func righButtonClicked(_ sender: UIBarButtonItem) {
@@ -118,25 +193,28 @@ class ProfileController: UIViewController {
             self.spinner.startAnimating()
             view.addSubview(self.spinner)
             self.updateUserInformation()
+            NotificationCenter.default.post(name: .updateInfo, object: nil)
         }
         
     }
     
-    @IBAction func doneButton(_ sender: UIBarButtonItem) {
+    
+    @IBAction func doneButton(_ sender: UIButton) {
         NotificationCenter.default.post(name: .updateInfo, object: nil)
         dismiss(animated: true, completion: nil)
     }
     
+    @IBOutlet weak var doneButton: UIButton!
     
     private func updateUserInformation() {
         var params = [String:Any]()
-        if self.firstNameTextField.text != self.firstNameSegue {
+        if self.firstNameTextField.text != self.userData.firstName {
             params["firstName"] = self.firstNameTextField.text
         }
-        if self.secondNameTextField.text != self.secondNameSegue {
+        if self.secondNameTextField.text != self.userData.secondName {
             params["secondName"] = self.secondNameTextField.text
         }
-        if self.emaiTextField.text != self.emailSegue {
+        if self.emaiTextField.text != self.userData.email {
             params["email"] = self.emaiTextField.text
         }
         if self.pswdTextField.text != "" && self.confirmpswdTextField.text == self.pswdTextField.text {
@@ -147,8 +225,9 @@ class ProfileController: UIViewController {
             self.confirmpswdTextField.text = ""
             self.pswdTextField.text = ""
         }
-        
-        if self.imageView.image?.pngData() != UIImage(data:Data.init(base64Encoded: self.imageSegue, options: .init(rawValue: 0))!)?.pngData()! {
+      //  UIImage(data:Data.init(base64Encoded: self.imageSegue, options: .init(rawValue: 0))!)?.pngData()!
+        //let test = Data.init(base64Encoded: self.imageSegue, options: .init(rawValue: 0))
+        if self.imageView.image?.pngData() != UIImage(data: self.userData.image)?.pngData() {
            
             let imageData:NSData = self.imageView.image!.jpegData(compressionQuality: 0.5)! as NSData //UIImagePNGRepresentation(img)
             let imgString = imageData.base64EncodedString(options: .init(rawValue: 0))
@@ -248,6 +327,65 @@ class ProfileController: UIViewController {
         let task = URLSession.shared.dataTask(with: request as URLRequest)
         task.resume()
         NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+    }
+    private func requestUserData(){
+        let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
+        let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/users/" + userId!)!
+        var request = URLRequest(url:url)
+        request.httpMethod = "GET"
+        if var key = accessToken {
+            key = "Bearer " + key
+            request.setValue(key, forHTTPHeaderField: "Authorization")
+        }
+        let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+           self.stopSpinner(spinner: self.spinner)
+            print(data)
+            guard error == nil else {
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            print(data)
+            self.parseUser(data: data)
+           
+        }
+        dataTask.resume()
+    }
+    
+    private func parseUser(data: Data)  {
+        var firstName = String()
+        var secondName = String()
+        var email = String()
+        var image = Data()
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: data)
+            if var jsonDict: [String:String ] = jsonObject as? [String : String] {
+                firstName = jsonDict["firstName"]!
+                secondName = jsonDict["secondName"]!
+                email = jsonDict["email"]!
+                if  let imageData = jsonDict["image"] {
+                    image = Data(imageData.utf8)
+                }
+                else {
+                    image = (UIImage(named: "noPhoto")?.pngData())!
+                }
+                self.userData = User(email: email, uid: "0", firstName: firstName, secondName: secondName, image: image)
+                 self.stopSpinner(spinner: self.spinner)
+            }
+            else {
+                print("Invalid JSON")
+            }
+        }
+        catch {
+            print ("JSON parsing error:"+error.localizedDescription)
+            
+        }
+        
+    }
+    @objc func reloadUserData(notification: NSNotification) {
+        self.requestUserData()
     }
     
 }

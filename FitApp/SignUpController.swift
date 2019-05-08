@@ -21,11 +21,22 @@ class SignUp: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let sub = Gradient()
+        view.layer.insertSublayer(sub.setGradient(view: self.view), at: 0)
+        self.firstNameTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+        self.secondNameTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+        self.emailTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+        self.pswdTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+        self.confirmPswdTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+           self.signUpButton.layer.cornerRadius = 5
+        self.title = "Регистрация"
+        
     }
+    @IBOutlet weak var signUpButton: UIButton!
     
-    @IBAction func cancelRegistration(_ sender: UIBarButtonItem) {
+    /*@IBAction func cancelRegistration(_ sender: UIBarButtonItem) {
         dismiss(animated: true, completion: nil)
-    }
+    }*/
     @IBAction func signUpButton(_ sender: Any) {
         if (self.firstNameTextField.text?.isEmpty)! || (self.secondNameTextField.text?.isEmpty)! || (self.emailTextField.text?.isEmpty)! || (self.pswdTextField.text?.isEmpty)!
         {

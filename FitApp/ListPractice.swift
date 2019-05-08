@@ -50,6 +50,9 @@ class ListPractice: UITableViewController  {
     
    override func viewDidLoad() {
         super.viewDidLoad()
+         navigationController?.navigationBar.prefersLargeTitles = true
+    NotificationCenter.default.addObserver(self, selector: #selector(reloadPracticeList(notification:)), name:.reloadPracticeList, object: nil)
+        self.title = "Тренировки"
         tableView.dataSource = self
         tableView.delegate = self
         requestPractice()
@@ -202,16 +205,23 @@ class ListPractice: UITableViewController  {
         }
         return [delete]
     }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)!
+         performSegue(withIdentifier: "detailPractice", sender: cell)
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detailPractice" {
             let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
             let practice = self.ObjectArray[indexPath!.section].sectionObjects[indexPath!.row].uid
             let rights = self.ObjectArray[indexPath!.section].sectionObjects[indexPath!.row].owner
-            let detailPractice: DetailPractice = segue.destination as! DetailPractice
+            let name = self.ObjectArray[indexPath!.section].sectionObjects[indexPath!.row].name
+            //let navController = segue.destination as! UINavigationController
+            let detailPractice: DetailPractice =  segue.destination as! DetailPractice
             detailPractice.practiceId = practice
             detailPractice.practiceOwner = rights
             detailPractice.practiceStatus = self.ObjectArray[indexPath!.section].sectionObjects[indexPath!.row].status
+            detailPractice.practiceName = name 
         }
     }
 
@@ -231,7 +241,13 @@ class ListPractice: UITableViewController  {
             warningController.addAction(buttonAction)
             self.present(warningController, animated: true, completion: nil)
         }
-        
+    }
+    
+    
+    @objc func reloadPracticeList (notification: Notification) {
+        self.practiceList.removeAll()
+        self.requestPractice()
+        print("work Reload")
     }
 
     }
@@ -250,4 +266,12 @@ extension Date {
       ///  print("Date",dateFormatterPrint.string(from: date!)) // Feb 01,2018
         return dateFormatterPrint.string(from: date!);
     }
+    
+   
+}
+
+
+
+extension Notification.Name {
+    static let reloadPracticeList = Notification.Name("reloadPracticeList")
 }

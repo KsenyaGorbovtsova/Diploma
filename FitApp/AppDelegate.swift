@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         if (accessToken != nil) {
             let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let mainPage = mainStoryboard.instantiateViewController(withIdentifier: "mainPageNav") as! UINavigationController
+            let mainPage = mainStoryboard.instantiateViewController(withIdentifier: "mainPageNav") as! UITabBarController
             self.window?.rootViewController = mainPage
         }
         return true

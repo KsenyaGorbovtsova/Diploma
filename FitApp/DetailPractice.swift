@@ -23,6 +23,7 @@ class DetailPractice: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = self.practiceName
         if self.practiceStatus == false || self.practiceOwner != KeychainWrapper.standard.string(forKey: "userId") {
             print(practiceStatus)
             self.AddExercise.isEnabled = false
@@ -37,6 +38,7 @@ class DetailPractice: UITableViewController {
     
    
     var practiceId: String = ""
+    var practiceName: String = ""
     var practiceOwner: String = ""
     var practiceStatus: Bool = false
     var exerciseList = [Exercise]()
@@ -119,9 +121,10 @@ class DetailPractice: UITableViewController {
             addExercise.practiceid = self.practiceId
         }
         if segue.identifier == "SearchFromDetailPractice" {
-            let navController = segue.destination as! UINavigationController
-            let allExercises = navController.topViewController as! AllExerciseControler
+           //let navController = segue.destination as! UINavigationController
+            let allExercises = segue.destination as! AllExerciseControler
             allExercises.detailExerFlag = true
+            allExercises.tabBar = false
         }
     }
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

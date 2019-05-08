@@ -21,6 +21,9 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     var search = UISearchController(searchResultsController: nil)
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Друзья"
+         navigationController?.navigationBar.prefersLargeTitles = true
+        self.tableView.allowsMultipleSelection = true
         NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingFriend(notifiction:)), name: .reloadListFriend, object: nil)
         search.searchResultsUpdater = self
         search.obscuresBackgroundDuringPresentation = false
@@ -155,6 +158,9 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         cell.backgroundColor = UIColor.white
         cell.textLabel?.textColor = UIColor.black
         cell.detailTextLabel?.textColor = UIColor.black
+        if self.flagCreateNewPractice == false  {
+            cell.selectionStyle = .none
+        }
         if !isFiltering() {
             
         let friend: User = self.friendsList[indexPath.row]
@@ -167,6 +173,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             }
         cell.textLabel?.text = friend.email
         cell.detailTextLabel?.text = String(friend.firstName + " " + friend.secondName)
+            
         return cell
         }
         else if isFiltering() {
@@ -256,8 +263,9 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             if segue.identifier == "userData" {
                 let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
-                let navController = segue.destination as! UINavigationController
-                let detailFriend = navController.topViewController as! ProfileController
+               // let navController = segue.destination as! UINavigationController
+                //let detailFriend = navController.topViewController as! ProfileController
+                let detailFriend: ProfileController = segue.destination as! ProfileController
                 var userId = ""
                 var firstName = ""
                 var secondName = ""
@@ -286,6 +294,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
                 detailFriend.email = email
                 detailFriend.image = image
                 detailFriend.flagAddedFriend = addFlag
+                detailFriend.fromFriend = true
             
             
         }
@@ -407,11 +416,9 @@ extension UITableView{
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
-        titleLabel.textColor = UIColor.init(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 1)
-        messageLabel.textColor = UIColor.init(displayP3Red: 0.40, green: 0.40, blue: 0.40, alpha: 1)
+        titleLabel.textColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1.0)
+        messageLabel.textColor = UIColor.init(displayP3Red:0.35, green:0.34, blue:0.84, alpha:1.0)
         
-        titleLabel.textColor = UIColor.green
-        messageLabel.textColor = UIColor.green
         
         
         titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
