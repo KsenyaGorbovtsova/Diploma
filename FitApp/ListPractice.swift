@@ -15,18 +15,41 @@ class ListPractice: UITableViewController  {
     
     
    
-    var ObjectArray = [Objects]()
+    public var ObjectArray = [Objects]()
     var practiceList = [String : [Practice]]() {
         didSet {
-            //self.ObjectArray.removeAll()
+            self.ObjectArray.removeAll()
+            var flag = 0
             for (key, value) in self.practiceList {
                 if ObjectArray.contains(Objects(sectionName: key, sectionObjects: value)) {
                     continue
                 } else {
-                self.ObjectArray.append(Objects(sectionName: key, sectionObjects: value))
+                    if self.ObjectArray.count == 0 {
+                        self.ObjectArray.append(Objects(sectionName: key, sectionObjects: value))
+                    } else {
+                    
+                    for x in self.ObjectArray {
+                        var y = x
+                        if y.sectionName == key {
+                            for i in value{
+                                y.sectionObjects.append(i)
+                            }
+                            self.ObjectArray.remove(at: self.ObjectArray.index(of: x)!)
+                          self.ObjectArray.append(y)
+                            flag = 1
+                        }
+                    }
+                    if flag == 0 {
+                         self.ObjectArray.append(Objects(sectionName: key, sectionObjects: value))
+                    } else {
+                        flag = 0
+                        }
+                }
                 }
             }
+            self.ObjectArray.sort{($0.sectionName)>($1.sectionName)}
         }
+        
     }
   /*  override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,23 +66,34 @@ class ListPractice: UITableViewController  {
        
         func hash(into hasher: inout Hasher) {
             hasher.combine(sectionName)
-            
         }
+        
     }
     
     
    override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl = refreshControl
+    
          navigationController?.navigationBar.prefersLargeTitles = true
-    NotificationCenter.default.addObserver(self, selector: #selector(reloadPracticeList(notification:)), name:.reloadPracticeList, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadPracticeList(notification:)), name:.reloadPracticeList, object: nil)
         self.title = "Тренировки"
         tableView.dataSource = self
         tableView.delegate = self
         requestPractice()
-        //tableView.reloadData()
+        
         
     }
- 
+    @objc func refresh(){
+        print("refresh")
+        NotificationCenter.default.post(name: .reloadPracticeList, object: nil)
+        tableView.reloadData()
+        refreshControl?.endRefreshing()
+    }
     
     private func parsePractice (data: Data){
         do {
@@ -114,7 +148,7 @@ class ListPractice: UITableViewController  {
         //request.setValue( "Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
         let dataTask = URLSession.shared.dataTask(with: request)  {data, response, error in
-            print(String(decoding: data!, as: UTF8.self))
+           
             
             guard error == nil else {
                 return
@@ -167,7 +201,11 @@ class ListPractice: UITableViewController  {
         return cell
     }
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+       if ObjectArray[section].sectionName == "01 Jan,0001" {
+            return "Без даты"
+       } else {
         return ObjectArray[section].sectionName
+       }
     }
     
     private func deletePractice(id:String) {
@@ -223,6 +261,7 @@ class ListPractice: UITableViewController  {
             detailPractice.practiceStatus = self.ObjectArray[indexPath!.section].sectionObjects[indexPath!.row].status
             detailPractice.practiceName = name 
         }
+       
     }
 
     func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
@@ -246,6 +285,7 @@ class ListPractice: UITableViewController  {
     
     @objc func reloadPracticeList (notification: Notification) {
         self.practiceList.removeAll()
+        //self.ObjectArray.removeAll()
         self.requestPractice()
         print("work Reload")
     }

@@ -21,6 +21,7 @@ class SignUp: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround() 
         let sub = Gradient()
         view.layer.insertSublayer(sub.setGradient(view: self.view), at: 0)
         self.firstNameTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
@@ -52,7 +53,7 @@ class SignUp: UIViewController {
         }
         
         
-        self.spinner.color = UIColor.green
+        self.spinner.color = UIColor(red: 0.35, green: 0.34, blue: 0.84, alpha: 1)
         self.spinner.center = view.center
         self.spinner.hidesWhenStopped = false
         self.spinner.startAnimating()
@@ -64,8 +65,8 @@ class SignUp: UIViewController {
     
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {
-            self.spinner.stopAnimating()
-            self.spinner.removeFromSuperview()
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
         }
     }
     

@@ -19,6 +19,7 @@ class AddNewPractice: UIViewController {
     var editPracticeFlag = true
     var repeatAfter1 = Int()
     var addPracticeToself = true
+    
     @IBOutlet weak var repeatAfter: UITextField!
     @IBOutlet weak var numDay: UITextField!
     
@@ -33,7 +34,7 @@ class AddNewPractice: UIViewController {
     @IBOutlet weak var addPractToSelf: UISwitch!
     
     @IBAction func savePractice(_ sender: UIButton) {
-        self.spinner.color = UIColor.green
+        self.spinner.color = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         self.spinner.center = view.center
         self.spinner.hidesWhenStopped = false
         self.spinner.startAnimating()
@@ -42,13 +43,18 @@ class AddNewPractice: UIViewController {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         var params = [String:Any]()
         if self.dateInput.text != "" {
+            print(self.dateInput.text)
             let formatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .iso8601)
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
-            if let date = formatter.date(from:  self.dateInput.text!) {
-                params["date"] = formatter.string(from: date)
+            formatter.dateFormat = "EEEE, MMM dd, yyyy"
+            if let date = self.dateInput.text {
+                let dateform = formatter.date(from: date)
+                let formatter2 = DateFormatter()
+                formatter2.calendar = Calendar(identifier: .iso8601)
+                formatter2.dateFormat = "yyyy-MM-dd'T'HH:mm:ssss'Z'"
+                params["date"] = formatter2.string(from: dateform!)
+                params["repeatAfter"] = Int(self.repeatAfter.text ?? "0")
             }
-            params["repeatAfter"] = Int(self.repeatAfter.text ?? "0")
         }
         if self.PracticeNameTextField.text == "" {
             self.DisplayWarnining(warning: "Дайте название тренировке", title: "Упс!", dismissing: false)
@@ -144,7 +150,7 @@ class AddNewPractice: UIViewController {
         }
     }
     
-    private func addPracticeToUsers (idPractice: String, idsUsers: [String:String]) {
+    public func addPracticeToUsers (idPractice: String, idsUsers: [String:String]) {
         let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         var params = [String:Any] ()
@@ -224,14 +230,19 @@ class AddNewPractice: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround() 
         self.title = "Новая тренировка"
+       
         NotificationCenter.default.addObserver(self, selector: #selector(setChosenExercises(notification:)), name: .chosenExercise, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(setChosenFriends(notification:)), name: .chosenfriends, object: nil)
         self.PracticeNameTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
         self.dateInput.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
          self.numDay.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
         self.saveNewPractice.layer.cornerRadius = 5
+        self.saveNewPractice.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         self.swithEdit.addTarget(self, action: #selector(self.switchIsChanged(_:)), for: UIControl.Event.valueChanged)
+        self.addPractToSelf.onTintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+        self.swithEdit.onTintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
          self.addPractToSelf.addTarget(self, action: #selector(self.switch2IsChanged(_:)), for: UIControl.Event.valueChanged)
         //datePicker.maximumDate = Date()
         print(chosenExercises)
@@ -242,8 +253,8 @@ class AddNewPractice: UIViewController {
     
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {
-            self.spinner.stopAnimating()
-            self.spinner.removeFromSuperview()
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
         }
     }
    
@@ -300,9 +311,11 @@ class AddNewPractice: UIViewController {
         }
         
     }
+   
     
 }
 extension Notification.Name {
     static let chosenExercise = Notification.Name("chosenExercise")
     static let chosenfriends = Notification.Name("chosenFriends")
+  
 }

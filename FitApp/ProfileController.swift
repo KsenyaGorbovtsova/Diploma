@@ -11,8 +11,10 @@ import UIKit
 
 class ProfileController: UIViewController {
     let spinner = UIActivityIndicatorView(style: .gray)
+    var flagInvitefriend = false
     var userData = User()
     var fromFriend = false
+    var invitePractice = String()
     @IBOutlet weak var secondNameTextField: UITextField!
     @IBOutlet weak var firstNameTextField: UITextField!
     
@@ -41,6 +43,8 @@ class ProfileController: UIViewController {
     var flagAddedFriend = false // friend from filteredData - false, friend from friendList - true
     
     @IBOutlet weak var SignOutButton: UIButton!
+    
+    
     @IBAction func photoPickerClicked(_ sender: UIButton) {
         self.photoPicker.present(from: sender)
     }
@@ -49,14 +53,20 @@ class ProfileController: UIViewController {
     
     @IBOutlet weak var addOrDeleteFriend: UIButton!
     
-    override func viewWillAppear(_ animated: Bool) {
-    }
+   
     
     @IBOutlet weak var zamer: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+     
+        self.hideKeyboardWhenTappedAround() 
+        self.spinner.color = UIColor(red: 0.35, green: 0.34, blue: 0.84, alpha: 1)
+        self.spinner.center = view.center
+        self.spinner.hidesWhenStopped = false
+        self.addOrDeleteFriend.setTitleColor(.white, for: .normal)
+        self.addOrDeleteFriend.layer.cornerRadius = 5
          navigationController?.navigationBar.prefersLargeTitles = true
         if self.fromFriend == true {
        // if self.tabBarController == nil{
@@ -65,24 +75,34 @@ class ProfileController: UIViewController {
             self.firstNameLabel.text = self.firstName
             self.secondNameLabel.text = self.secondName
             self.emailLabel.text = self.email
-            self.imageView.image = UIImage(data: image)
+            if self.image.count == 0 {
+                self.imageView.image = UIImage(named: "noPhoto")
+            }
+            else {
+            let imageData = Data.init(base64Encoded: self.image, options: .init(rawValue: 0))
+                self.imageView.image = UIImage(data: imageData ?? (UIImage(named: "noPhoto")?.pngData())!)
+            }
             self.firstNameTextField.isHidden = true
             self.secondNameTextField.isHidden = true
             self.emaiTextField.isHidden = true
             self.pswdTextField.isHidden = true
             self.confirmpswdTextField.isHidden = true
-            if self.flagAddedFriend == false {
+            if self.flagAddedFriend == false  {
                 self.addOrDeleteFriend.setTitle("Добавить", for: .normal)
-                self.addOrDeleteFriend.layer.cornerRadius = 5
-                self.addOrDeleteFriend.backgroundColor = UIColor(displayP3Red: 0.30, green:0.85,blue:0.39, alpha:1.0)
-                self.addOrDeleteFriend.setTitleColor(UIColor.white, for: .normal)
+               
+                self.addOrDeleteFriend.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+                
                 
             }
             else {
-                 self.addOrDeleteFriend.setTitle("Удалить", for: .normal)
-                self.addOrDeleteFriend.layer.cornerRadius = 5
+                
+                if self.flagInvitefriend == false {
+                self.addOrDeleteFriend.setTitle("Удалить из друзей", for: .normal)
                 self.addOrDeleteFriend.backgroundColor = UIColor(displayP3Red: 1.00, green:0.23, blue:0.19, alpha:1.0)
-                self.addOrDeleteFriend.setTitleColor(UIColor.white, for: .normal)
+                } else {
+                     self.addOrDeleteFriend.setTitle("Отправить тренировку", for: .normal)
+                     self.addOrDeleteFriend.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+                }
                 
             }
             self.confirmPswdLine.isHidden = true
@@ -93,15 +113,15 @@ class ProfileController: UIViewController {
         }
         else {
             
-            self.spinner.color = UIColor.green
-            self.spinner.center = view.center
-            self.spinner.hidesWhenStopped = false
+            NotificationCenter.default.addObserver(self, selector: #selector(reloadView(notidication:)), name: .reloadView, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(reloadUserData(notification:)), name: .updateInfo, object: nil)
+            
             self.spinner.startAnimating()
             view.addSubview(self.spinner)
             self.requestUserData()
-            sleep(20)
+            //sleep(20)
             self.title = "Личный кабинет"
-            NotificationCenter.default.addObserver(self, selector: #selector(reloadUserData(notification:)), name: .updateInfo, object: nil)
+          
             self.photoPickerButton.isHidden = false
             self.zamer.isHidden = false
             self.photoPicker = PhotoPicker(presentationController: self, delegate: self)
@@ -129,14 +149,26 @@ class ProfileController: UIViewController {
             self.confirmpswdTextField.isHidden = false
            self.confirmpswdTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
              self.addOrDeleteFriend.setTitle("Сохранить", for: .normal)
-            self.addOrDeleteFriend.layer.cornerRadius = 5
-            self.addOrDeleteFriend.backgroundColor = UIColor(displayP3Red: 0.30, green:0.85, blue:0.39, alpha:1.0)
+            
+            self.addOrDeleteFriend.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
             
             self.SignOutButton.isHidden = false
         }
     }
-    
+   
     @IBAction func signOut(_ sender: UIButton) {
+        let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
+        let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/users/" + userId! + "/logout")!
+        var request = URLRequest(url:url)
+        request.httpMethod = "GET"
+        if var key = accessToken {
+            key = "Bearer " + key
+            request.setValue(key, forHTTPHeaderField: "Authorization")
+        }
+       
+        let dataTask = URLSession.shared.dataTask(with: request)
+        dataTask.resume()
         KeychainWrapper.standard.removeObject(forKey: "accessToken")
         KeychainWrapper.standard.removeObject(forKey: "userId")
         
@@ -146,25 +178,26 @@ class ProfileController: UIViewController {
     }
     
     @IBAction func addOrDeleteButtom(_ sender: UIButton) {
-        if self.fromFriend == true  && self.flagAddedFriend == false {
+        if self.fromFriend == true  && self.flagAddedFriend == false && self.flagInvitefriend == false {
             self.addOrDeleteFriendToUser(idFriend: self.idFriend, action: "Add")
             NotificationCenter.default.post(name: .reloadListFriend, object: nil)
             navigationController?.popViewController(animated: true)
-            dismiss(animated: true, completion: nil)
-            
             
         }
-        else  if self.fromFriend == true  && self.flagAddedFriend == true {
+        else  if self.fromFriend == true  && self.flagAddedFriend == true && self.flagInvitefriend == false {
             self.addOrDeleteFriendToUser(idFriend: self.idFriend, action: "Delete")
             NotificationCenter.default.post(name: .reloadListFriend, object: nil)
             navigationController?.popViewController(animated: true)
-            dismiss(animated: true, completion: nil)
+           
+            
+        }
+        else if self.flagInvitefriend == true {
+           let invite = AddNewPractice()
+            invite.addPracticeToUsers(idPractice: self.invitePractice, idsUsers: ["0" : idFriend])
+            self.navigationController?.popViewController(animated: true)
             
         }
         else {
-            self.spinner.color = UIColor.green
-            self.spinner.center = view.center
-            self.spinner.hidesWhenStopped = false
             self.spinner.startAnimating()
             view.addSubview(self.spinner)
             self.updateUserInformation()
@@ -187,9 +220,7 @@ class ProfileController: UIViewController {
            
         }
         else {
-            self.spinner.color = UIColor.green
-            self.spinner.center = view.center
-            self.spinner.hidesWhenStopped = false
+           
             self.spinner.startAnimating()
             view.addSubview(self.spinner)
             self.updateUserInformation()
@@ -264,13 +295,15 @@ class ProfileController: UIViewController {
                 return
             }
             self.DisplayWarnining(warning: "Изменения сохранены", title: "Congrats" + "🎉", dismissing: true)
+           NotificationCenter.default.post(name: .updateInfo, object: nil)
+            
         }
         dataTask.resume()
     }
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {
-            self.spinner.stopAnimating()
-            self.spinner.removeFromSuperview()
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
         }
     }
     func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
@@ -372,7 +405,8 @@ class ProfileController: UIViewController {
                     image = (UIImage(named: "noPhoto")?.pngData())!
                 }
                 self.userData = User(email: email, uid: "0", firstName: firstName, secondName: secondName, image: image)
-                 self.stopSpinner(spinner: self.spinner)
+                NotificationCenter.default.post(name: .reloadView, object: nil)
+                self.stopSpinner(spinner: self.spinner)
             }
             else {
                 print("Invalid JSON")
@@ -387,11 +421,38 @@ class ProfileController: UIViewController {
     @objc func reloadUserData(notification: NSNotification) {
         self.requestUserData()
     }
+
     
-}
+    @objc func reloadView(notidication: Notification) {
+        DispatchQueue.main.async {
+        let imageData = Data.init(base64Encoded: self.userData.image, options: .init(rawValue: 0))
+        self.imageView.image = UIImage(data: (imageData ?? (UIImage(named: "noPhoto")?.pngData())!)) ??  UIImage(named: "noPhoto")
+        self.firstNameTextField.text = self.userData.firstName
+        self.secondNameTextField.text = self.userData.secondName
+        self.emaiTextField.text = self.userData.email
+            }
+        }
+    }
 extension ProfileController: PickerDelegate {
     func didSelect(image: UIImage?) {
         self.imageView.image = image
     }
 }
 
+extension Notification.Name {
+    static let reloadView = Notification.Name("reloadView")
+  
+
+    
+}
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}

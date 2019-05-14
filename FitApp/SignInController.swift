@@ -21,7 +21,7 @@ class SignIn: UIViewController {
             self.DisplayWarnining(warning: "Fill in all the fields", title: "Warning", dismissing: false)
             return
         }
-        self.spinner.color = UIColor.green
+        self.spinner.color = UIColor(red: 0.35, green: 0.34, blue: 0.84, alpha: 1)
         self.spinner.center = view.center
         self.spinner.hidesWhenStopped = false
         self.spinner.startAnimating()
@@ -33,6 +33,7 @@ class SignIn: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround() 
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -107,8 +108,8 @@ class SignIn: UIViewController {
     
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {
-            self.spinner.stopAnimating()
-            self.spinner.removeFromSuperview()
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
         }
     }
     

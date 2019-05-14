@@ -10,7 +10,7 @@ import SwiftKeychainWrapper
 import UIKit
 
 class DetailExercise: UIViewController {
-    
+    let spinner = UIActivityIndicatorView(style: .gray)
     
     @IBOutlet weak var imageView: UIImageView!
     var exercise: Exercise!
@@ -31,20 +31,34 @@ class DetailExercise: UIViewController {
     
     @IBAction func EditExercise(_ sender: UIBarButtonItem) {
     }
-    
+    func stopSpinner(spinner: UIActivityIndicatorView) {
+        DispatchQueue.main.async {
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround() 
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadApparatus(notification:)), name: .reloadAppararus, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadMeasure(notification:)), name: .reloadMeasure, object: nil)
+        self.spinner.color = UIColor(red: 0.35, green: 0.34, blue: 0.84, alpha: 1)
+        self.spinner.center = view.center
+        self.spinner.hidesWhenStopped = false
+        self.spinner.startAnimating()
+        view.addSubview(self.spinner)
         self.requestApparatus(apparatusId: self.exercise.apparatusId)
         self.requestMeasurement(measurementId: self.exercise.measureUnitId)
-        sleep(10)
+       // sleep(10)
+        self.title = self.exercise.name
         if self.flagBar == true {
             self.navigationItem.rightBarButtonItem = nil
-            self.title = self.exercise.name
-            self.nameExercise.isHidden = true
+            self.nameExercise.isHidden = true/////убрать
         }
         else {
-            self.nameExercise.isHidden = false
+            
+            self.nameExercise.isHidden = true////убрать
         }
         if self.exercise.status == false {
             self.editButton.isEnabled = false
@@ -93,6 +107,8 @@ class DetailExercise: UIViewController {
                 else {
                     print("no")
                 }
+                NotificationCenter.default.post(name: .reloadMeasure, object: nil)
+                //self.stopSpinner(spinner: self.spinner)
             } catch let error {
                 print(error.localizedDescription)
             }
@@ -133,6 +149,8 @@ class DetailExercise: UIViewController {
                     else {
                         print("no")
                     }
+                NotificationCenter.default.post(name: .reloadAppararus, object: nil)
+                self.stopSpinner(spinner: self.spinner)
                
             } catch let error {
                 print(error.localizedDescription)
@@ -160,7 +178,23 @@ class DetailExercise: UIViewController {
             
         }
     }
+    @objc func reloadApparatus(notification: Notification) {
+        DispatchQueue.main.async {
+            self.apparatusLabel.text = self.nameApparatus
+            let imageData = Data.init(base64Encoded: self.imageApparatus, options: .init(rawValue: 0))
+            self.imageView.image = UIImage(data: (imageData ?? (UIImage(named: "noImage")?.pngData())!)) ??  UIImage(named: "noImage")
+        }
+        
+    }
+    @objc func reloadMeasure(notification: Notification) {
+        DispatchQueue.main.async {
+             self.measure_Unitlabel.text = self.nameMeasurement
+        }
+    }
     
     
-    
+}
+extension Notification.Name {
+    static let reloadAppararus = Notification.Name("reloadApparatus")
+    static let reloadMeasure = Notification.Name("reloadMeasure")
 }

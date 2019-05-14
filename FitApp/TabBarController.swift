@@ -9,17 +9,12 @@
 import UIKit
 
 class TabBarController: UITabBarController {
-   /* override func viewDidLoad() {
+    @IBInspectable var defaultIndex: Int = 2
+    
+    override func viewDidLoad() {
         super.viewDidLoad()
-        viewControllers?.forEach {
-            if let navController = $0 as? UINavigationController {
-                navController.topViewController?.view
-            } else {
-                $0.view.description
-            }
-        }
-
-        }*/
+        selectedIndex = defaultIndex
+    }
     }
     
 

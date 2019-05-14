@@ -11,6 +11,7 @@ import UIKit
 
 class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate  {
     
+  
     
     var resultSearch = UISearchController(searchResultsController: nil)
     var exerciseList = [Exercise]()
@@ -18,17 +19,23 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     var filteredTableData = [Exercise]()
     var tappededit = false
     var preparation = [Exercise]()
+    var flagEditTapped = false
     var detailExerFlag = false
     var tabBar = true
+    
+    @IBOutlet weak var addExrToBase: UIBarButtonItem!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl = refreshControl
+        self.hideKeyboardWhenTappedAround() 
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadExrBase(notification:)), name: .reloadExrBase, object: nil)
         if self.tabBar == true {
-            //self.navigationItem.rightBarButtonItem = nil
-           // self.navigationItem.leftBarButtonItem = nil
-            self.navigationItem.rightBarButtonItems = nil
-            
+            self.navigationItem.rightBarButtonItems = [self.addExrToBase]
         } else
         {
              self.navigationItem.rightBarButtonItems = [self.doneButton, self.editButton]
@@ -49,7 +56,11 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         requestExercises()
         
     }
-    
+    @objc func refresh(){
+        NotificationCenter.default.post(name: .reloadListExr, object: nil)
+        tableView.reloadData()
+        refreshControl?.endRefreshing()
+    }
     private func selected () {
         if  let selectedItems = self.tableView.indexPathsForSelectedRows {
             for x in selectedItems {
@@ -62,11 +73,21 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         
     @IBAction func doneAddingExercises(_ sender: UIBarButtonItem) {
         //dismiss(animated: true, completion: {
+        if self.tappededit == false {
             if  let selectedItems = self.tableView.indexPathsForSelectedRows {
             for x in selectedItems {
                 
                self.selectedExercises[self.exerciseList[x[1]].name] = self.exerciseList[x[1]].uid
                 }
+            }}
+           else {
+                for x in self.preparation.reversed() {
+                    print(x.name)
+                    self.selectedExercises[x.name] = x.uid
+                    
+                    self.tappededit = false
+                }
+            }
                // print(selectedExercises)
                 if self.detailExerFlag == false {
                     NotificationCenter.default.post(name:.chosenExercise, object: nil, userInfo: selectedExercises)
@@ -74,8 +95,8 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
                 else if detailExerFlag == true {
                     NotificationCenter.default.post(name: .searchExerAndAdd, object: nil, userInfo: selectedExercises)
                 }
-            }
-            dismiss(animated: true, completion: nil)
+            
+            self.navigationController?.popViewController(animated: true)
         //})
     }
     
@@ -83,8 +104,11 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     @IBAction func reorderRows(_ sender: Any) {
         
         self.tappededit = !self.tappededit
+       
         self.selected()
         self.preparation = self.exerciseList.filter({self.selectedExercises.values.contains($0.uid)})
+        
+        
         //print(self.preparation)
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -158,7 +182,6 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
            return  self.preparation.count
         }
     }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllExerciseCell", for: indexPath)
         
@@ -195,7 +218,6 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         }
        // return cell
     }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
          let cell = tableView.cellForRow(at: indexPath)!
         if self.tabBar == true {
@@ -215,22 +237,23 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
             showExr.exercise = exercise
             showExr.flagBar = true
         }
+        if segue.identifier == "newExrFromTab" {
+            let createExr = segue.destination as! AddNewExercise
+            createExr.flagTabBar = true
+        }
     }
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)!
         cell.accessoryType = .none
     }
-    
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let exerciseToMove = self.exerciseList[sourceIndexPath.row]
-        self.exerciseList.remove(at: sourceIndexPath.row)
-        self.exerciseList.insert(exerciseToMove, at: destinationIndexPath.row)
+        let exerciseToMove = self.preparation[sourceIndexPath.row]
+        self.preparation.remove(at: sourceIndexPath.row)
+        self.preparation.insert(exerciseToMove, at: destinationIndexPath.row)
     }
-    
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
             return UITableViewCell.EditingStyle.none
     
@@ -263,5 +286,12 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         }
         //print("searchBarCancelButtonClicked")
     }
+    @objc func reloadExrBase (notification: Notification) {
+        self.exerciseList.removeAll()
+        self.requestExercises()
+    }
     
+}
+extension Notification.Name {
+    static let reloadExrBase = Notification.Name("reloadExrBase")
 }

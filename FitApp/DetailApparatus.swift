@@ -16,9 +16,11 @@ class DetailApparatus: UIViewController {
     var imageSegue = Data()
     var showApparatusId = [String:String]()
     var newApparatusId = [String:String]()
+    
+    @IBOutlet weak var nameTitle: UILabel!
     @IBOutlet weak var imageApparatus: UIImageView!
     @IBOutlet weak var addImageButton: UIButton!
-    @IBOutlet weak var nameLabel: UILabel!
+   // @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var nameTextLabel: UITextField!
     @IBOutlet weak var saveButton: UIButton!
     var photoPicker: PhotoPicker!
@@ -30,20 +32,28 @@ class DetailApparatus: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if self.flagShow == true {
+            self.hideKeyboardWhenTappedAround() 
+            self.title = self.name
             self.addImageButton.isHidden = true
             self.nameTextLabel.isHidden = true
-            self.nameLabel.isHidden = false
-            self.nameLabel.text = self.name
+            self.nameTitle.isHidden = true
+            //self.nameLabel.isHidden = false
+           // self.nameLabel.text = self.name
             self.saveButton.isHidden = false
              self.saveButton.setTitle("Выбрать", for: .normal)
         }
         else {
+            self.title = "Новое оборудование"
+            self.nameTitle.isHidden = false
             self.addImageButton.isHidden = false
+            self.addImageButton.layer.cornerRadius = 5
             self.photoPicker = PhotoPicker(presentationController: self, delegate: self)
             self.nameTextLabel.isHidden = false
-            self.nameLabel.isHidden = true
+            self.nameTextLabel.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
+           // self.nameLabel.isHidden = true
             self.saveButton.isHidden = false
             self.saveButton.setTitle("Сохранить", for: .normal)
+            self.saveButton.layer.cornerRadius = 5
         }
         if self.imageSegue.count == 0 {
             self.imageApparatus.image = UIImage(named: "noImage")
@@ -57,16 +67,17 @@ class DetailApparatus: UIViewController {
     
     @IBAction func saveButtonClicked(_ sender: UIButton) {
         if self.flagShow == false {
-        self.spinner.color = UIColor.green
+        self.spinner.color = UIColor(red: 0.35, green: 0.34, blue: 0.84, alpha: 1)
         self.spinner.center = view.center
         self.spinner.hidesWhenStopped = false
         self.spinner.startAnimating()
         view.addSubview(self.spinner)
         self.postApparatus()
+        NotificationCenter.default.post(name: .reloadApparatusList, object: nil)
         }
         else {
              NotificationCenter.default.post(name: .apparatusId, object: nil, userInfo: self.showApparatusId)
-             dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
         }
     }
     private func postApparatus() {
@@ -132,8 +143,8 @@ class DetailApparatus: UIViewController {
     
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {
-            self.spinner.stopAnimating()
-            self.spinner.removeFromSuperview()
+            spinner.stopAnimating()
+            spinner.removeFromSuperview()
         }
     }
     func DisplayWarnining (warning: String, title: String, dismissing: Bool, numButtons: Int) -> Void {
@@ -155,7 +166,7 @@ class DetailApparatus: UIViewController {
                     NotificationCenter.default.post(name: .apparatusId, object: nil, userInfo: self.newApparatusId)
                     warningController.dismiss(animated: true, completion: nil)
                     if dismissing == true {
-                        self.dismiss(animated: true, completion: nil)
+                        self.navigationController?.popViewController(animated: true)
                     }
                 }
             }
@@ -185,3 +196,4 @@ extension DetailApparatus: PickerDelegate{
         self.imageApparatus.image = image
     }
 }
+

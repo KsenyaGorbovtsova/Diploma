@@ -15,14 +15,17 @@ class ListApparatus: UITableViewController {
     var chosenApparatus = String()
     var chosenIndexPath = IndexPath()
     
+    @IBOutlet weak var addNewAppar: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadApparatusList(notification:)), name: .reloadApparatusList, object: nil)
+        self.title = "Оборудование"
+        
+        self.navigationController?.navigationItem.rightBarButtonItem = self.addNewAppar
+        
         self.requestApparatuses()
     }
-    
-    @IBAction func doneButton(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
-    }
+  
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -34,7 +37,7 @@ class ListApparatus: UITableViewController {
         let apparatus: Apparatus = self.apparatusList[indexPath.row]
         cell.textLabel?.text = apparatus.name
         if apparatus.uid == self.chosenApparatus {
-            cell.backgroundColor = UIColor.green
+            cell.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
             self.chosenIndexPath = indexPath
         }
         return  cell
@@ -53,15 +56,16 @@ class ListApparatus: UITableViewController {
             self.chosenApparatus = self.apparatusList[indexPath.row].uid
             self.chosenIndexPath = indexPath
             let cell = tableView.cellForRow(at: indexPath)
-            cell?.backgroundColor = UIColor.init(displayP3Red: 0.85, green: 0.92, blue: 0.83, alpha: 1)
-            cell?.textLabel?.textColor = UIColor.lightGray
+            cell?.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
+            cell?.textLabel?.textColor = UIColor.black
             NotificationCenter.default.post(name: .apparatusId, object: nil, userInfo: ["0":self.chosenApparatus])
             self.dismiss(animated: true, completion: nil)
         }
         
-        addApparatus.backgroundColor = UIColor.green
+        addApparatus.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         return [addApparatus]
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showApparatus" {
             let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
@@ -71,6 +75,7 @@ class ListApparatus: UITableViewController {
             detailApparatus.imageSegue = self.apparatusList[indexPath!.row].image
             detailApparatus.showApparatusId = ["0":self.apparatusList[indexPath!.row].uid]
         }
+        
        // if segue.identifier =="detailNewApparatus"
     }
     
@@ -125,4 +130,11 @@ class ListApparatus: UITableViewController {
         }
         return apparatusList
     }
+    @objc func reloadApparatusList(notification: Notification){
+        self.apparatusList.removeAll()
+         self.requestApparatuses()
+    }
+}
+extension Notification.Name {
+    static let reloadApparatusList = Notification.Name("reloadApparatusList")
 }

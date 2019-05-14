@@ -11,7 +11,7 @@ import SwiftKeychainWrapper
 
 class  DetailMeasurement: UIViewController {
     
-    @IBOutlet weak var nameLabel: UILabel!
+    
     @IBOutlet weak var nameTextLabel: UITextField!
     @IBOutlet weak var actionButton: UIButton!
     let spinner = UIActivityIndicatorView(style: .gray)
@@ -22,28 +22,33 @@ class  DetailMeasurement: UIViewController {
     var newMentId = [String:String]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        if self.flagShow == true {
-            self.nameLabel.isHidden = false
+        self.actionButton.layer.cornerRadius = 5
+      /*  if self.flagShow == true {
+            self.title = self.name
             self.nameTextLabel.isHidden = true
-            self.nameLabel.text = self.name
             self.actionButton.setTitle("Выбрать", for: .normal)
         }
-        else {
-            self.nameLabel.isHidden = true
+        else {*/
+            self.title = "Новый параметр"
+           
             self.nameTextLabel.isHidden = false
+            self.nameTextLabel.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
             self.actionButton.setTitle("Сохранить", for: .normal)
-        }
+            self.actionButton.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+            
+        //}
     }
     
     
     @IBAction func actionButtonClecked(_ sender: UIButton) {
         if self.flagShow == false {
-            self.spinner.color = UIColor.green
+            self.spinner.color = UIColor(red: 0.35, green: 0.34, blue: 0.84, alpha: 1)
             self.spinner.center = view.center
             self.spinner.hidesWhenStopped = false
             self.spinner.startAnimating()
             view.addSubview(self.spinner)
             self.postMent()
+            NotificationCenter.default.post(name: .reloadMeasureList, object: nil)
         }
         else {
             NotificationCenter.default.post(name: .measurementId, object: nil, userInfo: self.showMentId)
@@ -105,8 +110,8 @@ class  DetailMeasurement: UIViewController {
     }
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {
-            self.spinner.stopAnimating()
-            self.spinner.removeFromSuperview()
+            spinner.stopAnimating()
+           spinner.removeFromSuperview()
         }
     }
     func DisplayWarnining (warning: String, title: String, dismissing: Bool, numButtons: Int) -> Void {

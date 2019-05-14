@@ -19,7 +19,7 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     var apparatusId = String()
     var measurementId = String()
    var editPermission = true
-    
+    var flagTabBar = false
     
     @IBOutlet weak var switchEdit: UISwitch!
     
@@ -58,16 +58,18 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround() 
         navigationController?.navigationBar.prefersLargeTitles = true
         self.saveExercise.layer.cornerRadius = 5
-        self.saveExercise.backgroundColor = UIColor(displayP3Red: 0.30, green:0.85,blue:0.39, alpha:1.0)
+        self.saveExercise.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         self.saveExercise.setTitleColor(UIColor.white, for: .normal)
         self.exerciseNameTextfield.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
         self.numMeasureTextField.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.76)
         NotificationCenter.default.addObserver(self, selector: #selector(addApparatusId(notification:)), name: .apparatusId, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addMeasurementId(notification:)), name: .measurementId, object: nil)
         self.switchEdit.addTarget(self, action: #selector(self.switchIsChanged(_:)), for: UIControl.Event.valueChanged)
-        let image = UIImage(named: "box") as UIImage?
+        self.switchEdit.onTintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+        
         let arr = (0...100).map {"\($0)"}
         self.pickerData.append(arr)
         self.pickerData.append(arr)
@@ -127,10 +129,14 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                     
                    // let exerciseId = json["id"] as! String
                   //  for x in json {
-                    if self.flagConnectionIds == true || self.flagEdit == true {
+                    if self.flagTabBar == false {
+                    if self.flagConnectionIds == true || self.flagEdit == true  {
                     self.connectPracticeExercise(practiceId: self.practiceid, exerciseId: json["id"] as! String)
                     } else {
                         self.idOfCreatedExercise = json["id"] as! String
+                    }
+                    } else {
+                        NotificationCenter.default.post(name: .reloadExrBase, object: nil)
                     }
                  //   }
                     
@@ -187,13 +193,13 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             newPractice.chosenExercises.append(self.idOfCreatedExercise)
         }
         if segue.identifier == "chooseApparatusButton" {
-             let navController = segue.destination as! UINavigationController
-            let apparatusList = navController.topViewController as!  ListApparatus
+            // let navController = segue.destination as! UINavigationController
+            let apparatusList = segue.destination as!  ListApparatus
             apparatusList.chosenApparatus = self.apparatusId
         }
         if segue.identifier == "addMeasurement"{
-            let navController = segue.destination as! UINavigationController
-            let mentList = navController.topViewController as!  ListMeasurements
+            //let navController = segue.destination as! UINavigationController
+            let mentList = segue.destination as!  ListMeasurements
             mentList.chosenMeasurement = self.measurementId
         }
         

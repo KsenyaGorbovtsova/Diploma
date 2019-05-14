@@ -18,24 +18,37 @@ class DetailPractice: UITableViewController {
   
     
     
+    @IBOutlet weak var inviteFriend: UIBarButtonItem!
     @IBOutlet weak var searchAndAdd: UIBarButtonItem!
     @IBOutlet weak var AddExercise: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl = refreshControl
+        self.hideKeyboardWhenTappedAround() 
         self.title = self.practiceName
         if self.practiceStatus == false || self.practiceOwner != KeychainWrapper.standard.string(forKey: "userId") {
             print(practiceStatus)
             self.AddExercise.isEnabled = false
             self.searchAndAdd.isEnabled = false
+            self.inviteFriend.isEnabled = false
+            
         }
         tableView.dataSource = self
         tableView.delegate = self
+       
         requestExercise(id: practiceId)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingExr(notifiction:)), name: .reloadListExr, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(connectPracticeWithExercSearch(notification:)), name: .searchExerAndAdd, object: nil)
     }
-    
+    @objc func refresh(){
+        NotificationCenter.default.post(name: .reloadListExr, object: nil)
+        tableView.reloadData()
+        refreshControl?.endRefreshing()
+    }
    
     var practiceId: String = ""
     var practiceName: String = ""
@@ -70,7 +83,7 @@ class DetailPractice: UITableViewController {
     }
     
     
-    private func requestExercise(id: String) {
+    public func requestExercise(id: String) {
         let url = "https://shielded-chamber-25933.herokuapp.com/practices/"
         let urlEndpoint = URL(string: url + id + "/contain")!
         let dataTask = URLSession.shared.dataTask(with: urlEndpoint) { data, response, error in
@@ -126,6 +139,11 @@ class DetailPractice: UITableViewController {
             allExercises.detailExerFlag = true
             allExercises.tabBar = false
         }
+        if segue.identifier == "inviteFriend" {
+            let addFriend = segue.destination as! Friends
+            addFriend.flagInviteFriends = true
+            addFriend.invitePractice = practiceId
+        }
     }
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return self.practiceStatus
@@ -135,17 +153,29 @@ class DetailPractice: UITableViewController {
             let deletedId = self.exerciseList[indexPath.row].uid
             self.exerciseList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-            self.deleteExercise(id: deletedId)
+            self.deleteExercise(exerciseId: deletedId )
         }
         return [delete]
         
     }
     
-    private func deleteExercise(id: String) {
-        let url = "https://shielded-chamber-25933.herokuapp.com/exercises/"
-        let deletedURL = URL(string: url + id)
+    private func deleteExercise( exerciseId: String) {
+         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
+        var params = ["delete" : exerciseId ]
+        let url = "https://shielded-chamber-25933.herokuapp.com/practices/"
+        let deletedURL = URL(string: url + self.practiceId + "/deleteExercise")
         var request = URLRequest(url: deletedURL!)
         request.httpMethod = "DELETE"
+        if var key = accessToken {
+            key = "Bearer " + key
+            request.setValue( "Bearer" + key, forHTTPHeaderField: "Authorization")
+        }
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request)
         task.resume()

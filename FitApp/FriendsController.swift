@@ -16,18 +16,27 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     @IBOutlet weak var cancelAddFriendToNewPractice: UIBarButtonItem!
     var flagCreateNewPractice = false
     var flagChooseForPractice = false
+    var flagInviteFriends = false
+    var invitePractice = String()
+  
     var friendsList = [User]()
     var chosenFriends = [String:String]()
     var search = UISearchController(searchResultsController: nil)
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.hideKeyboardWhenTappedAround() 
         self.title = "Друзья"
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        self.refreshControl = refreshControl
          navigationController?.navigationBar.prefersLargeTitles = true
         self.tableView.allowsMultipleSelection = true
         NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingFriend(notifiction:)), name: .reloadListFriend, object: nil)
         search.searchResultsUpdater = self
         search.obscuresBackgroundDuringPresentation = false
-        search.searchBar.placeholder = "Search Users"
+        search.searchBar.placeholder = "Введите email для поиска"
         navigationItem.searchController?.hidesNavigationBarDuringPresentation = false
         navigationItem.searchController = search
         navigationItem.searchController?.searchBar.delegate = self
@@ -37,17 +46,22 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         tableView.delegate = self
         requestFriends()
         if flagCreateNewPractice == false {
-            self.navBarFriends.rightBarButtonItem = nil
+            self.navBarFriends.rightBarButtonItems = nil
             self.navBarFriends.leftBarButtonItem = nil
         }
+       
         else {
             self.navBarFriends.rightBarButtonItem = self.addFriendsToNewPractice
-            self.addFriendsToNewPractice.title = "Add"
+            self.addFriendsToNewPractice.title = "Добавить"
             self.navBarFriends.leftBarButtonItem = self.cancelAddFriendToNewPractice
             self.cancelAddFriendToNewPractice.title = "Cancel"
         }
     }
-    
+    @objc func refresh(){
+        NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+        tableView.reloadData()
+        refreshControl?.endRefreshing()
+    }
     @IBAction func addFriendsToNewPractice(_ sender: UIBarButtonItem) {
         self.selected()
         NotificationCenter.default.post(name: .chosenfriends, object: nil, userInfo: chosenFriends)
@@ -99,21 +113,27 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         dataTask.resume()
     }
     private func parseFriend(data: Data) -> [User] {
+        var image = Data()
         let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
         var userList = [User]()
         do {
             let jsonObject = try JSONSerialization.jsonObject(with: data)
             if jsonObject as? [Dictionary<String, Any>] != nil {
-                for x in jsonObject as! [Dictionary<String,Any>] {
-                    let uid = x["id"] as? String
+                for x in jsonObject as! [Dictionary<String,String>] {
+                    let uid = x["id"]
                     if uid == userId || !(friendsList.filter{$0.uid == uid}).isEmpty {
                         continue
                     }
-                    let firstName = x["firstName"] as? String
-                    let secondName = x["secondName"] as? String
-                    let email = x["email"] as? String
-                    let image = x["image"] as? Data
-                    let newFriend = User(email: email!, uid: uid!, firstName: firstName!, secondName: secondName!, image: image ?? (UIImage(named: "noPhoto")?.pngData()!)!)
+                    let firstName = x["firstName"]
+                    let secondName = x["secondName"]
+                    let email = x["email"] 
+                    if  let imageData = x["image"] {
+                        image = Data(imageData.utf8)
+                    }
+                    else {
+                        image = (UIImage(named: "noPhoto")?.pngData())!
+                    }
+                    let newFriend = User(email: email!, uid: uid!, firstName: firstName!, secondName: secondName!, image: image )
                     userList.append(newFriend)
                 }
             }
@@ -165,7 +185,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             
         let friend: User = self.friendsList[indexPath.row]
             if self.chosenFriends.values.contains(friend.uid) {
-                cell.backgroundColor = UIColor.green
+                cell.backgroundColor =  UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
             }
             else {
                 cell.backgroundColor = UIColor.white
@@ -182,7 +202,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             let friend: User = self.filteredData[indexPath.row]
                 
                 if self.chosenFriends.values.contains(friend.uid) {
-                    cell.backgroundColor = UIColor.green
+                    cell.backgroundColor = UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
                    
                 }
                 else {
@@ -204,24 +224,43 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if isFiltering() {
-        let addFriend = UITableViewRowAction(style: .normal, title: "Add") {
+        if isFiltering() && self.flagInviteFriends == false {
+        let addFriend = UITableViewRowAction(style: .normal, title: "Добавить") {
             (action, indexPath) in
             let addId = self.filteredData[indexPath.row].uid
             self.addOrDeleteFriendToUser(idFriend: addId, action: "Add")
             self.friendsList.append(self.filteredData[indexPath.row])
            // let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath)
             let cell = tableView.cellForRow(at: indexPath)
-            cell?.backgroundColor = UIColor.init(displayP3Red: 0.85, green: 0.92, blue: 0.83, alpha: 1)
+            cell?.backgroundColor = UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
             cell?.textLabel?.textColor = UIColor.lightGray
             cell?.detailTextLabel?.textColor = UIColor.lightGray
            
         }
-        addFriend.backgroundColor = UIColor.green
+        addFriend.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         return [addFriend]
         }
+        else if !isFiltering() &&  self.flagInviteFriends == true {
+            let addFriend = UITableViewRowAction(style: .normal, title: "Добавить") {
+                (action, indexPath) in
+                let addId = self.friendsList[indexPath.row].uid
+                
+               
+                let pract = AddNewPractice()
+                pract.addPracticeToUsers(idPractice: self.invitePractice, idsUsers: ["0" : addId])
+               
+               
+                let cell = tableView.cellForRow(at: indexPath)
+                cell?.backgroundColor = UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
+                cell?.textLabel?.textColor = UIColor.lightGray
+                cell?.detailTextLabel?.textColor = UIColor.lightGray
+                
+            }
+            addFriend.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+            return [addFriend]
+        }
         else {
-            let deleteFriend = UITableViewRowAction(style: .destructive, title: "Delete") {
+            let deleteFriend = UITableViewRowAction(style: .destructive, title: "Удалить") {
                 (action, indexPath) in
                 let deleteId = self.friendsList[indexPath.row].uid
                 self.addOrDeleteFriendToUser(idFriend: deleteId, action: "Delete")
@@ -234,7 +273,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)!
-        if self.flagCreateNewPractice == false {
+        if self.flagCreateNewPractice == false || self.flagInviteFriends == false {
             cell.selectionStyle = .none
             cell.accessoryType = .none
         }
@@ -242,7 +281,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             cell.selectionStyle = .blue
             cell.accessoryType = .checkmark
         }
-        if cell.backgroundColor == UIColor.green {
+        if cell.backgroundColor == UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1) {
             cell.selectionStyle = .none
             cell.accessoryType = .none
         }
@@ -295,6 +334,11 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
                 detailFriend.image = image
                 detailFriend.flagAddedFriend = addFlag
                 detailFriend.fromFriend = true
+                if self.flagInviteFriends == true {
+                    
+                    detailFriend.invitePractice = self.invitePractice
+                    detailFriend.flagInvitefriend = true
+                }
             
             
         }
@@ -317,8 +361,8 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         }
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
-        
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/users/\(userId!)/\(endPoint)")!
+        
         var request = URLRequest(url: url)
         request.httpMethod = httpMethod
         if var key = accessToken {
@@ -343,7 +387,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     var filteredData = [User]()
     func filterForSearch ( _ searchText: String, scope: String = "ALL") {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
-        if searchText == nil {
+        if searchText == nil || searchText.latinCharactersOnly == false {
             return
         }
         var url = URL(string: "https://shielded-chamber-25933.herokuapp.com/users/search?email=\(searchText.lowercased())")
@@ -391,11 +435,12 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         self.requestFriends()
         print("work")
     }
+    
 }
 
 extension Notification.Name {
     static let reloadListFriend = Notification.Name("reloadListFriend")
-}
+    }
 
 extension UITableView{
     
@@ -451,6 +496,10 @@ extension UITableView{
         self.separatorStyle = .singleLine
     }
 }
-
+extension String {
+    var latinCharactersOnly: Bool {
+        return self.range(of: "\\P{Latin}", options: .regularExpression) == nil
+    }
+}
 
 

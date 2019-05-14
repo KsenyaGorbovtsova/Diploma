@@ -53,7 +53,7 @@ open class PhotoPicker: NSObject {
         if let action = self.action(for: .photoLibrary, title: "Photo library") {
             alertController.addAction(action)
         }
-        
+    
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         self.presentationController?.present(alertController, animated: true)

@@ -17,12 +17,12 @@ class  ListMeasurements: UITableViewController {
     var chosenIndexPath = IndexPath()
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Параметры"
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadMeasureList(notification:)), name: .reloadMeasureList, object: nil)
         self.requestMeasurements()
     }
     
-    @IBAction func cancelButton(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
-    }
+  
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -32,10 +32,11 @@ class  ListMeasurements: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mentCell", for: indexPath)
+        cell.selectionStyle = .none
         let ment: Measurements = self.measurementsList[indexPath.row]
         cell.textLabel?.text = ment.name
         if ment.uid == self.chosenMeasurement {
-            cell.backgroundColor = UIColor.green
+            cell.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
             self.chosenIndexPath = indexPath
         }
         return  cell
@@ -53,17 +54,16 @@ class  ListMeasurements: UITableViewController {
             self.chosenMeasurement = self.measurementsList[indexPath.row].uid
             self.chosenIndexPath = indexPath
             let cell = tableView.cellForRow(at: indexPath)
-            cell?.backgroundColor = UIColor.init(displayP3Red: 0.85, green: 0.92, blue: 0.83, alpha: 1)
-            cell?.textLabel?.textColor = UIColor.lightGray
+            cell?.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
+            cell?.textLabel?.textColor = .black
             NotificationCenter.default.post(name: .measurementId, object: nil, userInfo: ["0":self.chosenMeasurement])
             self.dismiss(animated: true, completion: nil)
         }
         
-        addMent.backgroundColor = UIColor.green
+        addMent.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         return [addMent]
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    /*   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showMent" {
             let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
             let detailMent: DetailMeasurement = segue.destination as! DetailMeasurement
@@ -71,8 +71,8 @@ class  ListMeasurements: UITableViewController {
             detailMent.name = self.measurementsList[indexPath!.row].name
             detailMent.showMentId = ["0":self.measurementsList[indexPath!.row].uid]
         }
-    }
-    
+    }*/
+  
     private func requestMeasurements() {
         
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
@@ -123,4 +123,11 @@ class  ListMeasurements: UITableViewController {
         }
         return mentList
     }
+    @objc func reloadMeasureList(notification: Notification) {
+        self.measurementsList.removeAll()
+        self.requestMeasurements()
+    }
+}
+extension Notification.Name {
+    static let reloadMeasureList = Notification.Name("reloadMeasureList")
 }
