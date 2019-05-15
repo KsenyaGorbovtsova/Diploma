@@ -1781,7 +1781,7 @@
         <scene sceneID="fh7-Gt-0cO">
             <objects>
                 <navigationController title="Profile" automaticallyAdjustsScrollViewInsets="NO" id="yXe-2d-Wh9" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Еще" image="more-button-of-three-dots" id="aox-yR-QD9"/>
+                    <tabBarItem key="tabBarItem" title="Личный кабинет" image="more-button-of-three-dots" id="aox-yR-QD9"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="bCj-rJ-Ffp">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -1866,13 +1866,13 @@
         <image name="search" width="16" height="16"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rKi-bg-4Tj"/>
+        <segue reference="mm5-Wg-3be"/>
         <segue reference="4K4-mJ-Saq"/>
         <segue reference="sAu-Sz-2X7"/>
         <segue reference="WpM-BX-gR3"/>
         <segue reference="0jB-C5-61H"/>
         <segue reference="jlV-mS-ctL"/>
-        <segue reference="m9y-bw-kVp"/>
+        <segue reference="3VP-Qj-dHl"/>
         <segue reference="XSm-fu-tgS"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.3460007906" green="0.33548757429999998" blue="0.8400039077" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

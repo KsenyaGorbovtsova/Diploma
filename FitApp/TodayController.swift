@@ -41,11 +41,9 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
         self.exrTable.delegate = self
         requestTodayPlan()
         self.plate.clipsToBounds = false
-        self.plate.layer.shadowOpacity = 0.8
         self.plate.layer.cornerRadius = self.plate.frame.size.height/15
-        self.plate.layer.shadowOffset = CGSize(width: 3.0, height: 3.0)
-        self.plate.layer.shadowRadius = 5.0
-        self.plate.layer.shadowColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1).cgColor
+       self.plate.layer.borderWidth = CGFloat(1)
+        self.plate.layer.borderColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1).cgColor
         
         
     }
@@ -56,9 +54,10 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     func close() {
         showPlate = true
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: { var plateTop = self.plate.frame
+        UIView.animate(withDuration: 0.5, delay: 0.35, options: .curveEaseOut, animations: { var plateTop = self.plate.frame
             plateTop.origin.y -= plateTop.size.height + 100
             self.plate.frame = plateTop}, completion: nil)
+        
     }
     func open(){
         exerToday.removeAll()
@@ -66,6 +65,7 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: { var plateTop = self.plate.frame
             plateTop.origin.y += plateTop.size.height + 100
             self.plate.frame = plateTop}, completion: nil)
+       
        
     }
    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

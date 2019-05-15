@@ -74,6 +74,10 @@ class ProfileController: UIViewController {
             self.zamer.isHidden = true
             self.firstNameLabel.text = self.firstName
             self.secondNameLabel.text = self.secondName
+            self.imageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            self.imageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 40).isActive = true
+            self.imageView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -40).isActive = true
+            
             self.emailLabel.text = self.email
             if self.image.count == 0 {
                 self.imageView.image = UIImage(named: "noPhoto")
