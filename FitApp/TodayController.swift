@@ -24,7 +24,7 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadToday(notification:)), name: .reloadToday, object: nil)
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -48,7 +48,7 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
         
     }
     @objc func refresh(){
-        NotificationCenter.default.post(name: .reloadPracticeList, object: nil)
+        NotificationCenter.default.post(name: .reloadToday, object: nil)
         tableViewPractice.reloadData()
         tableViewPractice.refreshControl?.endRefreshing()
     }
@@ -134,7 +134,7 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
  
 
-    private func requestTodayPlan() {
+     private func requestTodayPlan() {
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
        
@@ -242,9 +242,18 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
         dataTask.resume()
 }
+    @objc func reloadToday (notification: Notification) {
+        self.practicesToday.removeAll()
+        //self.ObjectArray.removeAll()
+        self.requestTodayPlan()
+        print("work Reload")
+    }
     
         
     
 }
 
 
+extension Notification.Name {
+    static let reloadToday = Notification.Name("reloadToday")
+}
