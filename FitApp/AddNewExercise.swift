@@ -58,6 +58,9 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if flagEdit == true {
+            self.title = "Редактирование"
+        }
         self.hideKeyboardWhenTappedAround() 
         navigationController?.navigationBar.prefersLargeTitles = true
         self.saveExercise.layer.cornerRadius = 5

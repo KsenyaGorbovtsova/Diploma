@@ -17,6 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        //let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
+        //print(userId)
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         if (accessToken != nil) {
             let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)

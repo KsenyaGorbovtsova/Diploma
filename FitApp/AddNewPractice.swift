@@ -46,13 +46,16 @@ class AddNewPractice: UIViewController {
             print(self.dateInput.text)
             let formatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .iso8601)
-            formatter.dateFormat = "EEEE, MMM dd, yyyy"
+            formatter.dateFormat = "EEEE, dd MMM yyyy" // для телефона
+           // formatter.dateFormat = "EEEE, MMM dd, yyyy" // для компа
             if let date = self.dateInput.text {
                 let dateform = formatter.date(from: date)
                 let formatter2 = DateFormatter()
                 formatter2.calendar = Calendar(identifier: .iso8601)
-                formatter2.dateFormat = "yyyy-MM-dd'T'HH:mm:ssss'Z'"
+                formatter2.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ" // для телефона
+               // formatter2.dateFormat = "yyyy-MM-dd'T'HH:mm:ssss'Z'" // для компа
                 params["date"] = formatter2.string(from: dateform!)
+                print(params["date"])
                 params["repeatAfter"] = Int(self.repeatAfter.text ?? "0")
             }
         }

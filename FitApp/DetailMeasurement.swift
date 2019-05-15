@@ -22,6 +22,7 @@ class  DetailMeasurement: UIViewController {
     var newMentId = [String:String]()
     override func viewDidLoad() {
         super.viewDidLoad()
+         self.hideKeyboardWhenTappedAround() 
         self.actionButton.layer.cornerRadius = 5
       /*  if self.flagShow == true {
             self.title = self.name

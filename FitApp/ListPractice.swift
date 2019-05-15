@@ -211,13 +211,25 @@ class ListPractice: UITableViewController  {
     private func deletePractice(id:String) {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
+         let params = ["delete" : id]
         
-        let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/users/\(userid)/delete")
+        let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/users/\(userid!)/delete")!
+        
         //let deletedURL = URL(string: url + id + "/delete")
-        var request = URLRequest(url: url!)
+        var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+        }
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-        request.addValue("Bearer \(String(describing: accessToken))", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        if var key = accessToken {
+            key = "Bearer " + key
+            request.setValue( "Bearer" + key, forHTTPHeaderField: "Authorization")
+            
+        }
         let task = URLSession.shared.dataTask(with: request)
         task.resume()
     }
