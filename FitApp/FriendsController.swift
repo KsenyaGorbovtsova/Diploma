@@ -224,8 +224,8 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if isFiltering() && self.flagInviteFriends == false {
-        let addFriend = UITableViewRowAction(style: .normal, title: "Добавить") {
+        if isFiltering() {//&& self.flagInviteFriends == false {
+        let addFriend = UITableViewRowAction(style: .normal, title: "Добавить в друзья") {
             (action, indexPath) in
             let addId = self.filteredData[indexPath.row].uid
             self.addOrDeleteFriendToUser(idFriend: addId, action: "Add")
@@ -241,7 +241,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         return [addFriend]
         }
         else if !isFiltering() &&  self.flagInviteFriends == true {
-            let addFriend = UITableViewRowAction(style: .normal, title: "Добавить") {
+            let addFriend = UITableViewRowAction(style: .normal, title: "Отправить тренировку") {
                 (action, indexPath) in
                 let addId = self.friendsList[indexPath.row].uid
                 
