@@ -54,32 +54,12 @@ class DetailPractice: UITableViewController {
     var practiceName: String = ""
     var practiceOwner: String = ""
     var practiceStatus: Bool = false
-    var exerciseList = [Exercise]()
+    var exerciseList = [exercise]()
     var newExerList: String = ""
     private func parseExercise(data: Data) {
-        do {
-            let jsonObject = try JSONSerialization.jsonObject(with: data)
-            if jsonObject as? [Dictionary<String,Any>] != nil {
-                for x in jsonObject as! [Dictionary<String,Any>] {
-                    let uid = x["id"] as? String
-                    let measureUnitId = x["measure_unitId"] as? String
-                    let num_measure = x["num_measure"] as? Int
-                    let num_rep = x["num_rep"] as? Int
-                    let num_try = x["num_try"] as? Int
-                    let apparatusId = x["apparatusId"] as? String
-                    let status = x["status"] as? Bool
-                    let name = x["name"] as? String
-                    let newExercise = Exercise(name: name!, uid: uid!, num_try: num_try!, num_rep: num_rep!, num_measure: num_measure!, measureUnitId: measureUnitId!, apparatusId: apparatusId!, status: status!)
-                    self.exerciseList.append(newExercise)
-                }
-            }
-            else {
-                print("Invalid JSON format")
-                return
-            }
-        } catch {
-            print ("JSON parsing error:"+error.localizedDescription)
-        }
+        let decoder = JSONDecoder()
+        let resp = try! decoder.decode([exercise].self, from: data)
+        self.exerciseList = self.exerciseList + resp
     }
     
     
@@ -113,8 +93,7 @@ class DetailPractice: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "exerciseCell", for: indexPath)
-        let exercise: Exercise = self.exerciseList[indexPath.row]
-        
+        let exercise: exercise = self.exerciseList[indexPath.row]
         cell.textLabel?.text = exercise.name
         cell.detailTextLabel?.text = String(exercise.status)
         return cell
@@ -125,6 +104,7 @@ class DetailPractice: UITableViewController {
             let indexPath = self.tableView.indexPath(for: (sender as! UITableViewCell))
             let exercise = self.exerciseList[indexPath!.row]
             let detailExercise: DetailExercise = segue.destination as! DetailExercise
+            print(exercise)
             detailExercise.exercise = exercise
             detailExercise.practiceId = self.practiceId
         }
@@ -150,7 +130,7 @@ class DetailPractice: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .destructive, title: "Удалить") { (action, indexPath) in
-            let deletedId = self.exerciseList[indexPath.row].uid
+            let deletedId = self.exerciseList[indexPath.row].id
             self.exerciseList.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             self.deleteExercise(exerciseId: deletedId )

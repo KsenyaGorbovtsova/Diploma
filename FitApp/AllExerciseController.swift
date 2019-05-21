@@ -14,11 +14,14 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
   
     
     var resultSearch = UISearchController(searchResultsController: nil)
-    var exerciseList = [Exercise]()
+   
+    var exerciseList = [exercise]()
     var selectedExercises = [String:String] ()
-    var filteredTableData = [Exercise]()
+   
+    var filteredTableData = [exercise]()
     var tappededit = false
-    var preparation = [Exercise]()
+   
+    var preparation = [exercise]()
     var flagEditTapped = false
     var detailExerFlag = false
     var tabBar = true
@@ -64,7 +67,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     private func selected () {
         if  let selectedItems = self.tableView.indexPathsForSelectedRows {
             for x in selectedItems {
-                self.selectedExercises[self.exerciseList[x[1]].name] = self.exerciseList[x[1]].uid
+                self.selectedExercises[self.exerciseList[x[1]].name] = self.exerciseList[x[1]].id
                 //self.selectedExercises.append(self.exerciseList[x[1]].uid)
                 
             }
@@ -76,14 +79,13 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         if self.tappededit == false {
             if  let selectedItems = self.tableView.indexPathsForSelectedRows {
             for x in selectedItems {
-                
-               self.selectedExercises[self.exerciseList[x[1]].name] = self.exerciseList[x[1]].uid
+                self.selectedExercises[self.exerciseList[x[1]].name] = self.exerciseList[x[1]].id
                 }
             }}
            else {
-                for x in self.preparation.reversed() {
+             for x in self.preparation.reversed() {
                     print(x.name)
-                    self.selectedExercises[x.name] = x.uid
+                self.selectedExercises[x.name] = x.id
                     
                     self.tappededit = false
                 }
@@ -102,14 +104,9 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     
     
     @IBAction func reorderRows(_ sender: Any) {
-        
         self.tappededit = !self.tappededit
-       
         self.selected()
-        self.preparation = self.exerciseList.filter({self.selectedExercises.values.contains($0.uid)})
-        
-        
-        //print(self.preparation)
+        self.preparation = self.exerciseList.filter({self.selectedExercises.values.contains($0.id)})
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -123,30 +120,9 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     
 
     private func parseExercises (data: Data) {
-        do {
-            let jsonObject = try JSONSerialization.jsonObject(with: data)
-            if jsonObject as? [Dictionary<String,Any>] != nil {
-                for x in jsonObject as! [Dictionary<String,Any>] {
-                    let uid = x["id"] as? String
-                    let name = x["name"] as? String
-                    let measureUnitId = x["measure_unitId"] as? String
-                    let num_measure = x["num_measure"] as? Int
-                    let num_rep = x["num_rep"] as? Int
-                    let num_try = x["num_try"] as? Int
-                    let apparatusId = x["apparatusId"] as? String
-                    let status = x["status"] as? Bool
-                    
-                    let newExercise = Exercise(name: name!, uid: uid!, num_try: num_try!, num_rep: num_rep!, num_measure: num_measure!, measureUnitId: measureUnitId!, apparatusId: apparatusId!, status: status!)
-                    self.exerciseList.append(newExercise)
-                }
-            }
-            else {
-                print ("Invalid json format")
-                return
-            }
-        } catch {
-            print ("JSON parsing error:"+error.localizedDescription)
-        }
+        let decoder = JSONDecoder()
+        let resp = try! decoder.decode([exercise].self, from: data)
+        self.exerciseList = self.exerciseList + resp
         
     }
     private func requestExercises()  {
@@ -173,20 +149,20 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.tappededit == false && !isFiltering() {
-        return self.exerciseList.count
+            return self.exerciseList.count
         }
         else if self.tappededit == false && isFiltering() {
-            return filteredTableData.count
+             return filteredTableData.count
         }
         else {
-           return  self.preparation.count
+            return  self.preparation.count
         }
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllExerciseCell", for: indexPath)
         
         if self.tappededit == false && !isFiltering() {
-            let exercise: Exercise = self.exerciseList[indexPath.row]
+            let exercise: exercise = self.exerciseList[indexPath.row]
             cell.textLabel?.text = exercise.name
             if self.tabBarController != nil {
                 cell.selectionStyle = .none
@@ -199,24 +175,18 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
             return cell
         }
         else if self.tappededit == false && isFiltering() {
-            let exercise: Exercise = self.filteredTableData[indexPath.row]
+            let exercise: exercise = self.filteredTableData[indexPath.row]
             cell.textLabel?.text = exercise.name
             return cell
         }
-        else if indexPath.row <= self.preparation.count-1 && self.tappededit == true   {
-            
-           // while indexPath.row < preparation.count {
-            print (self.preparation)
-            print(indexPath.row)
-            let exercise: Exercise = self.preparation[indexPath.row]
+            else if indexPath.row <= self.preparation.count-1 && self.tappededit == true   {
+            let exercise: exercise = self.preparation[indexPath.row]
             cell.textLabel?.text = exercise.name
             return cell
-           // }
         }
         else {
             return cell
         }
-       // return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
          let cell = tableView.cellForRow(at: indexPath)!
@@ -253,6 +223,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         let exerciseToMove = self.preparation[sourceIndexPath.row]
         self.preparation.remove(at: sourceIndexPath.row)
         self.preparation.insert(exerciseToMove, at: destinationIndexPath.row)
+        
     }
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
             return UITableViewCell.EditingStyle.none
@@ -267,7 +238,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         return resultSearch.searchBar.text?.isEmpty ?? true
     }
     func filterForSearch (_ searchText: String, scope: String = "ALL") {
-        filteredTableData = exerciseList.filter ({(exercise: Exercise) -> Bool in
+        filteredTableData = exerciseList.filter ({(exercise: exercise) -> Bool in
             return exercise.name.lowercased().contains(searchText.lowercased())
         })
         
@@ -280,8 +251,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         if  let selectedItems = self.tableView.indexPathsForSelectedRows {
             for x in selectedItems {
-                
-                self.selectedExercises[self.filteredTableData[x[1]].name] = self.filteredTableData[x[1]].uid
+                self.selectedExercises[self.filteredTableData[x[1]].name] = self.filteredTableData[x[1]].id
             }
         }
         //print("searchBarCancelButtonClicked")

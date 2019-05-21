@@ -30,3 +30,25 @@ struct apparatus: Codable {
     let name: String
     let image: String
 }
+
+struct exercise: Codable {
+    let id: String
+    let name: String
+    let num_try: Int
+    let num_rep: Int
+    let num_measure: Int
+    let apparatusId: String
+    let measureUnitId: String
+    let status: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case num_try
+        case num_rep
+        case num_measure
+        case apparatusId
+        case measureUnitId = "measure_unitId"
+        case status
+    }
+}

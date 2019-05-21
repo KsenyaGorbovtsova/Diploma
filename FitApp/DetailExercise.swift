@@ -13,7 +13,8 @@ class DetailExercise: UIViewController {
     let spinner = UIActivityIndicatorView(style: .gray)
     
     @IBOutlet weak var imageView: UIImageView!
-    var exercise: Exercise!
+    var exercise: exercise!
+   
     var practiceId = ""
     var flagBar = false
     var nameApparatus = String()
@@ -50,7 +51,6 @@ class DetailExercise: UIViewController {
         view.addSubview(self.spinner)
         self.requestApparatus(apparatusId: self.exercise.apparatusId)
         self.requestMeasurement(measurementId: self.exercise.measureUnitId)
-       // sleep(10)
         self.title = self.exercise.name
         if self.flagBar == true {
             self.navigationItem.rightBarButtonItem = nil
@@ -66,15 +66,18 @@ class DetailExercise: UIViewController {
         }
         
         
-        if exercise != nil {
+      if exercise != nil {
             
-            self.nameExercise.text = exercise.name
-            self.num_repLabel.text = String(exercise.num_rep)
-            self.num_tryLabel.text = String(exercise.num_try)
+        
+        self.nameExercise.text = exercise.name
+        
+        self.num_repLabel.text = String(exercise.num_rep)
+        self.num_tryLabel.text = String(exercise.num_try)
             self.apparatusLabel.text = self.nameApparatus
               let imageData = Data.init(base64Encoded: self.imageApparatus, options: .init(rawValue: 0))
             self.imageView.image = UIImage(data: (imageData ?? (UIImage(named: "noImage")?.pngData())!)) ??  UIImage(named: "noImage")
-            self.num_measureLabel.text = String(exercise.num_measure)
+        
+        self.num_measureLabel.text = String(exercise.num_measure)
             self.measure_Unitlabel.text = self.nameMeasurement
         }
         
@@ -174,7 +177,8 @@ class DetailExercise: UIViewController {
             addExercise.nameFromEdit = self.nameExercise.text ?? ""
             addExercise.flagEdit = true
             addExercise.practiceid = self.practiceId
-            addExercise.idOfEditedExercise = self.exercise.uid
+          
+            addExercise.idOfEditedExercise = self.exercise.id
             
         }
     }
