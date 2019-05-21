@@ -97,6 +97,7 @@ class ListPractice: UITableViewController  {
     
     private func parsePractice (data: Data){
         do {
+
             let jsonObject = try JSONSerialization.jsonObject(with: data)
             print(jsonObject)
             if jsonObject as? [Dictionary<String,Any>] != nil {

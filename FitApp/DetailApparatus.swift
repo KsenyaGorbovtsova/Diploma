@@ -31,6 +31,8 @@ class DetailApparatus: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.saveButton.layer.cornerRadius = 5
+        self.saveButton.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         if self.flagShow == true {
             self.hideKeyboardWhenTappedAround() 
             self.title = self.name
@@ -53,7 +55,7 @@ class DetailApparatus: UIViewController {
            // self.nameLabel.isHidden = true
             self.saveButton.isHidden = false
             self.saveButton.setTitle("Сохранить", for: .normal)
-            self.saveButton.layer.cornerRadius = 5
+            
         }
         if self.imageSegue.count == 0 {
             self.imageApparatus.image = UIImage(named: "noImage")

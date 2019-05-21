@@ -12,7 +12,8 @@ import SwiftKeychainWrapper
 
 class  ListMeasurements: UITableViewController {
     
-    var measurementsList = [Measurements]()
+    
+    var measurementsList = [measurement]()
     var chosenMeasurement = String()
     var chosenIndexPath = IndexPath()
     override func viewDidLoad() {
@@ -33,9 +34,12 @@ class  ListMeasurements: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mentCell", for: indexPath)
         cell.selectionStyle = .none
-        let ment: Measurements = self.measurementsList[indexPath.row]
+       
+        let ment: measurement = self.measurementsList[indexPath.row]
         cell.textLabel?.text = ment.name
-        if ment.uid == self.chosenMeasurement {
+        
+        if ment.id == self.chosenMeasurement {
+
             cell.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
             self.chosenIndexPath = indexPath
         }
@@ -43,7 +47,7 @@ class  ListMeasurements: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        let addMent = UITableViewRowAction(style: .normal, title: "Add") {
+        let addMent = UITableViewRowAction(style: .normal, title: "Добавить") {
             (action, indexPath) in
             if self.chosenMeasurement != "" {
                 let cell = tableView.cellForRow(at: self.chosenIndexPath)
@@ -51,7 +55,8 @@ class  ListMeasurements: UITableViewController {
                 cell?.textLabel?.textColor = UIColor.black
                 
             }
-            self.chosenMeasurement = self.measurementsList[indexPath.row].uid
+        
+            self.chosenMeasurement = self.measurementsList[indexPath.row].id
             self.chosenIndexPath = indexPath
             let cell = tableView.cellForRow(at: indexPath)
             cell?.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
@@ -91,6 +96,7 @@ class  ListMeasurements: UITableViewController {
                 return
             }
             do {
+               
                 self.measurementsList = self.parseMeasurements(data: data)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -102,25 +108,11 @@ class  ListMeasurements: UITableViewController {
         dataTask.resume()
     }
     
-    private func parseMeasurements(data: Data) -> [Measurements] {
-        var mentList = [Measurements]()
-        do {
-            let jsonObject = try JSONSerialization.jsonObject(with: data)
-            if jsonObject as? [Dictionary<String, Any>] != nil {
-                for x in jsonObject as! [Dictionary<String,Any>] {
-                    let uid = x["id"] as? String
-                    let name = x["name"] as? String
-                    let newMent = Measurements(uid: uid!, name: name!)
-                    mentList.append(newMent)
-                }
-            }
-            else {
-                print("Invalid json")
-            }
-        }
-        catch {
-            print ("JSON parsing error:"+error.localizedDescription)
-        }
+    private func parseMeasurements(data: Data) -> [measurement] {
+        var mentList = [measurement]()
+        let decoder = JSONDecoder()
+        let resp = try! decoder.decode([measurement].self, from: data)
+        mentList = mentList + resp
         return mentList
     }
     @objc func reloadMeasureList(notification: Notification) {

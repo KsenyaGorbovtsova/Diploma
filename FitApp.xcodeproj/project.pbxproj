@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9E132A01227B9260006829EB /* ListMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E132A00227B9260006829EB /* ListMeasurements.swift */; };
 		9E132A03227B95A5006829EB /* DetailMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E132A02227B95A5006829EB /* DetailMeasurement.swift */; };
+		9E1545912293D56000BB6D7E /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1545902293D56000BB6D7E /* Structs.swift */; };
 		9E1614BE22311A14002E167C /* AddNewPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E1614BD22311A14002E167C /* AddNewPractice.swift */; };
 		9E176905227F44D9001F63CC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E176904227F44D9001F63CC /* TabBarController.swift */; };
 		9E23937C2247E65E00DB4FBB /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937B2247E65E00DB4FBB /* SignInController.swift */; };
@@ -16,8 +17,6 @@
 		9E2393802247F08A00DB4FBB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E23937F2247F08A00DB4FBB /* User.swift */; };
 		9E288A7E2263827300DD9140 /* FriendsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E288A7D2263827300DD9140 /* FriendsController.swift */; };
 		9E288A80226C8E6000DD9140 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E288A7F226C8E6000DD9140 /* ProfileController.swift */; };
-		9E2BEFAE22772FD400F4C8DA /* Apparatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2BEFAD22772FD400F4C8DA /* Apparatus.swift */; };
-		9E2BEFB02277333A00F4C8DA /* measurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2BEFAF2277333A00F4C8DA /* measurements.swift */; };
 		9E2BEFB2227736C900F4C8DA /* ListApparartus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2BEFB1227736C900F4C8DA /* ListApparartus.swift */; };
 		9E2BEFB42277684400F4C8DA /* DetailApparatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2BEFB32277684400F4C8DA /* DetailApparatus.swift */; };
 		9E56276D2237A52C00AE566A /* AllExerciseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E56276C2237A52C00AE566A /* AllExerciseController.swift */; };
@@ -44,6 +43,7 @@
 		90D946D123EFF6C5632377EB /* Pods-FitApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FitApp.debug.xcconfig"; path = "Target Support Files/Pods-FitApp/Pods-FitApp.debug.xcconfig"; sourceTree = "<group>"; };
 		9E132A00227B9260006829EB /* ListMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListMeasurements.swift; sourceTree = "<group>"; };
 		9E132A02227B95A5006829EB /* DetailMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMeasurement.swift; sourceTree = "<group>"; };
+		9E1545902293D56000BB6D7E /* Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Structs.swift; sourceTree = "<group>"; };
 		9E1614BD22311A14002E167C /* AddNewPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewPractice.swift; sourceTree = "<group>"; };
 		9E176904227F44D9001F63CC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		9E23937B2247E65E00DB4FBB /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
@@ -51,8 +51,6 @@
 		9E23937F2247F08A00DB4FBB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9E288A7D2263827300DD9140 /* FriendsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsController.swift; sourceTree = "<group>"; };
 		9E288A7F226C8E6000DD9140 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
-		9E2BEFAD22772FD400F4C8DA /* Apparatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Apparatus.swift; sourceTree = "<group>"; };
-		9E2BEFAF2277333A00F4C8DA /* measurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = measurements.swift; sourceTree = "<group>"; };
 		9E2BEFB1227736C900F4C8DA /* ListApparartus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListApparartus.swift; sourceTree = "<group>"; };
 		9E2BEFB32277684400F4C8DA /* DetailApparatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailApparatus.swift; sourceTree = "<group>"; };
 		9E56276C2237A52C00AE566A /* AllExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExerciseController.swift; sourceTree = "<group>"; };
@@ -112,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				9EB0B84422240DD2008BF8EF /* ListPractice.swift */,
+				9E1545902293D56000BB6D7E /* Structs.swift */,
 				9EE4E6A322293583007337E4 /* DetailExercise.swift */,
 				9EB0B84222240D04008BF8EF /* DetailPractice.swift */,
 				9EF758A4217E1C670033ACC1 /* AppDelegate.swift */,
@@ -128,10 +127,8 @@
 				9E7A5A7B226E363100303E06 /* photoPicker.swift */,
 				9EF418412286167A006EEAF7 /* TodayController.swift */,
 				9E2BEFB1227736C900F4C8DA /* ListApparartus.swift */,
-				9E2BEFAD22772FD400F4C8DA /* Apparatus.swift */,
 				9EEE06D4227E12C3005F3020 /* gradientLayer.swift */,
 				9EEE06D6227E195D005F3020 /* LaunchScreen.swift */,
-				9E2BEFAF2277333A00F4C8DA /* measurements.swift */,
 				9E132A00227B9260006829EB /* ListMeasurements.swift */,
 				9E132A02227B95A5006829EB /* DetailMeasurement.swift */,
 				9E288A7D2263827300DD9140 /* FriendsController.swift */,
@@ -287,7 +284,6 @@
 				9E176905227F44D9001F63CC /* TabBarController.swift in Sources */,
 				9EEE06D5227E12C3005F3020 /* gradientLayer.swift in Sources */,
 				9E288A7E2263827300DD9140 /* FriendsController.swift in Sources */,
-				9E2BEFB02277333A00F4C8DA /* measurements.swift in Sources */,
 				9EB0B84722240EB3008BF8EF /* Practice.swift in Sources */,
 				9EB0B84322240D04008BF8EF /* DetailPractice.swift in Sources */,
 				9E132A03227B95A5006829EB /* DetailMeasurement.swift in Sources */,
@@ -302,11 +298,11 @@
 				9E698566222D6C730004A54A /* AddNewExercise.swift in Sources */,
 				9EF758A5217E1C670033ACC1 /* AppDelegate.swift in Sources */,
 				9E2BEFB2227736C900F4C8DA /* ListApparartus.swift in Sources */,
-				9E2BEFAE22772FD400F4C8DA /* Apparatus.swift in Sources */,
 				9E2BEFB42277684400F4C8DA /* DetailApparatus.swift in Sources */,
 				9EE4E6A222291A23007337E4 /* Exercise.swift in Sources */,
 				9E23937C2247E65E00DB4FBB /* SignInController.swift in Sources */,
 				9EEE06D7227E195D005F3020 /* LaunchScreen.swift in Sources */,
+				9E1545912293D56000BB6D7E /* Structs.swift in Sources */,
 				9E56276D2237A52C00AE566A /* AllExerciseController.swift in Sources */,
 				9EB0B84522240DD2008BF8EF /* ListPractice.swift in Sources */,
 				9EF418422286167A006EEAF7 /* TodayController.swift in Sources */,

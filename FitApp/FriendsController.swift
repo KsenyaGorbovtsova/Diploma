@@ -81,7 +81,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     
     
     @IBAction func cancelAddingFriendsToNewPractice(_ sender: UIBarButtonItem) {
-        dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
     private func requestFriends() {
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
@@ -175,17 +175,18 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath)
-        cell.backgroundColor = UIColor.white
-        cell.textLabel?.textColor = UIColor.black
-        cell.detailTextLabel?.textColor = UIColor.black
+      
         if self.flagCreateNewPractice == false  {
             cell.selectionStyle = .none
+        } else {
+            cell.selectionStyle = .gray
         }
-        if !isFiltering() {
+        if !isFiltering()  {
             
         let friend: User = self.friendsList[indexPath.row]
             if self.chosenFriends.values.contains(friend.uid) {
-                cell.backgroundColor =  UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
+                cell.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
+
             }
             else {
                 cell.backgroundColor = UIColor.white
@@ -193,7 +194,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             }
         cell.textLabel?.text = friend.email
         cell.detailTextLabel?.text = String(friend.firstName + " " + friend.secondName)
-            
+        
         return cell
         }
         else if isFiltering() {
@@ -202,7 +203,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             let friend: User = self.filteredData[indexPath.row]
                 
                 if self.chosenFriends.values.contains(friend.uid) {
-                    cell.backgroundColor = UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
+                    cell.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
                    
                 }
                 else {
@@ -224,7 +225,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if isFiltering() {//&& self.flagInviteFriends == false {
+        if isFiltering()  {//&& self.flagInviteFriends == false {
         let addFriend = UITableViewRowAction(style: .normal, title: "Добавить в друзья") {
             (action, indexPath) in
             let addId = self.filteredData[indexPath.row].uid
@@ -240,7 +241,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         addFriend.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         return [addFriend]
         }
-        else if !isFiltering() &&  self.flagInviteFriends == true {
+        else if !isFiltering() && self.flagInviteFriends == true  {
             let addFriend = UITableViewRowAction(style: .normal, title: "Отправить тренировку") {
                 (action, indexPath) in
                 let addId = self.friendsList[indexPath.row].uid
@@ -254,6 +255,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
                 cell?.backgroundColor = UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
                 cell?.textLabel?.textColor = UIColor.lightGray
                 cell?.detailTextLabel?.textColor = UIColor.lightGray
+                
                 
             }
             addFriend.backgroundColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
@@ -278,7 +280,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             cell.accessoryType = .none
         }
         else {
-            cell.selectionStyle = .blue
+            cell.selectionStyle = .default
             cell.accessoryType = .checkmark
         }
         if cell.backgroundColor == UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1) {

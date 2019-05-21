@@ -622,7 +622,7 @@
                                 <color key="tintColor" red="0.29803921570000003" green="0.85098039219999999" blue="0.3921568627" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" image="add"/>
                                 <connections>
-                                    <segue destination="dO0-E3-YMI" kind="show" identifier="selectFriends" id="rKi-bg-4Tj"/>
+                                    <segue destination="C8I-kR-zWq" kind="show" identifier="selectFriends" id="sd3-uY-SzJ"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Можно не устанавливать ;)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zCe-KK-otH">
@@ -805,7 +805,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yEv-zF-cIf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1752" y="1399"/>
+            <point key="canvasLocation" x="1750.7246376811595" y="1398.8839285714284"/>
         </scene>
         <!--Упражнения-->
         <scene sceneID="a8B-XP-ZEj">
@@ -1859,14 +1859,13 @@
         <image name="search" width="16" height="16"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="mm5-Wg-3be"/>
-        <segue reference="4K4-mJ-Saq"/>
+        <segue reference="El6-bg-yGj"/>
         <segue reference="sAu-Sz-2X7"/>
         <segue reference="WpM-BX-gR3"/>
         <segue reference="0jB-C5-61H"/>
-        <segue reference="jlV-mS-ctL"/>
+        <segue reference="g0h-Ee-xzd"/>
         <segue reference="m9y-bw-kVp"/>
-        <segue reference="XSm-fu-tgS"/>
+        <segue reference="sd3-uY-SzJ"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.3460007906" green="0.33548757429999998" blue="0.8400039077" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

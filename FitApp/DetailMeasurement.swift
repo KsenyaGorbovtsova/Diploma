@@ -134,7 +134,7 @@ class  DetailMeasurement: UIViewController {
                     NotificationCenter.default.post(name: .measurementId, object: nil, userInfo: self.newMentId)
                     warningController.dismiss(animated: true, completion: nil)
                     if dismissing == true {
-                        self.dismiss(animated: true, completion: nil)
+                       self.navigationController?.popViewController(animated: true)
                     }
                 }
             }

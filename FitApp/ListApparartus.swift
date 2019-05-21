@@ -10,8 +10,7 @@ import UIKit
 import SwiftKeychainWrapper
 
 class ListApparatus: UITableViewController {
-    
-    var apparatusList = [Apparatus] ()
+    var apparatusList = [apparatus]()
     var chosenApparatus = String()
     var chosenIndexPath = IndexPath()
     
@@ -34,9 +33,9 @@ class ListApparatus: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "apparatusCell", for: indexPath)
-        let apparatus: Apparatus = self.apparatusList[indexPath.row]
+        let apparatus: apparatus = self.apparatusList[indexPath.row]
         cell.textLabel?.text = apparatus.name
-        if apparatus.uid == self.chosenApparatus {
+        if apparatus.id == self.chosenApparatus {
             cell.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
             self.chosenIndexPath = indexPath
         }
@@ -45,7 +44,7 @@ class ListApparatus: UITableViewController {
    
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
-        let addApparatus = UITableViewRowAction(style: .normal, title: "Add") {
+        let addApparatus = UITableViewRowAction(style: .normal, title: "Добавить") {
             (action, indexPath) in
             if self.chosenApparatus != "" {
                 let cell = tableView.cellForRow(at: self.chosenIndexPath)
@@ -53,7 +52,7 @@ class ListApparatus: UITableViewController {
                 cell?.textLabel?.textColor = UIColor.black
                 
             }
-            self.chosenApparatus = self.apparatusList[indexPath.row].uid
+            self.chosenApparatus = self.apparatusList[indexPath.row].id
             self.chosenIndexPath = indexPath
             let cell = tableView.cellForRow(at: indexPath)
             cell?.backgroundColor =  UIColor.init(displayP3Red: 0.78, green:0.78, blue:0.91, alpha: 1)
@@ -72,8 +71,9 @@ class ListApparatus: UITableViewController {
             let detailApparatus: DetailApparatus = segue.destination as! DetailApparatus
             detailApparatus.flagShow = true
             detailApparatus.name = self.apparatusList[indexPath!.row].name
-            detailApparatus.imageSegue = self.apparatusList[indexPath!.row].image
-            detailApparatus.showApparatusId = ["0":self.apparatusList[indexPath!.row].uid]
+            let dataImage = Data(self.apparatusList[indexPath!.row].image.utf8) ?? (UIImage(named: "noImage")?.pngData()!)!
+            detailApparatus.imageSegue = dataImage
+             detailApparatus.showApparatusId = ["0":self.apparatusList[indexPath!.row].id]
         }
         
        // if segue.identifier =="detailNewApparatus"
@@ -108,30 +108,16 @@ class ListApparatus: UITableViewController {
         dataTask.resume()
     }
     
-    private func parseApparatus(data: Data) -> [Apparatus] {
-        var apparatusList = [Apparatus]()
-        do {
-            let jsonObject = try JSONSerialization.jsonObject(with: data)
-            if jsonObject as? [Dictionary<String, Any>] != nil {
-                for x in jsonObject as! [Dictionary<String,Any>] {
-                    let uid = x["id"] as? String
-                    let name = x["name"] as? String
-                    let image = x["image"] as? String
-                    let newApparatus = Apparatus(uid: uid!, image: Data(image!.utf8) ?? (UIImage(named: "noImage")?.pngData()!)!, name: name!)
-                    apparatusList.append(newApparatus)
-                    }
-            }
-            else {
-                print("Invalid json")
-            }
-        }
-        catch {
-            print ("JSON parsing error:"+error.localizedDescription)
-        }
-        return apparatusList
+    private func parseApparatus(data: Data) -> [apparatus]{
+        var apparatusList1 = [apparatus]()
+        let decoder = JSONDecoder()
+        let resp = try! decoder.decode([apparatus].self, from: data)
+        apparatusList1 = apparatusList1 + resp
+       
+        return apparatusList1
     }
     @objc func reloadApparatusList(notification: Notification){
-        self.apparatusList.removeAll()
+         self.apparatusList.removeAll()
          self.requestApparatuses()
     }
 }

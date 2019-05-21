@@ -270,8 +270,9 @@ class AddNewPractice: UIViewController {
             addNewExercise.flagConnectionIds = false
         }
         if segue.identifier == "selectFriends" {
-            let navController = segue.destination as! UINavigationController
-            let friendList = navController.topViewController as! Friends
+           // let navController = segue.destination as! UINavigationController
+           // let friendList = navController.topViewController as! Friends
+            let friendList = segue.destination as! Friends
             friendList.flagCreateNewPractice = true
             friendList.chosenFriends = self.selectedFriends
 
