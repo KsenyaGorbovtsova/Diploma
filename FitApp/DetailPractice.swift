@@ -24,12 +24,15 @@ class DetailPractice: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingExr(notifiction:)), name: .reloadListExr, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(connectPracticeWithExercSearch(notification:)), name: .searchExerAndAdd, object: nil)
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         self.refreshControl = refreshControl
         self.hideKeyboardWhenTappedAround() 
         self.title = self.practiceName
+        adjustLargeTitleSize()
         if self.practiceStatus == false || self.practiceOwner != KeychainWrapper.standard.string(forKey: "userId") {
             print(practiceStatus)
             self.AddExercise.isEnabled = false
@@ -41,8 +44,7 @@ class DetailPractice: UITableViewController {
         tableView.delegate = self
        
         requestExercise(id: practiceId)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterAddingExr(notifiction:)), name: .reloadListExr, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(connectPracticeWithExercSearch(notification:)), name: .searchExerAndAdd, object: nil)
+      
     }
     @objc func refresh(){
         NotificationCenter.default.post(name: .reloadListExr, object: nil)
@@ -64,6 +66,7 @@ class DetailPractice: UITableViewController {
     
     
     public func requestExercise(id: String) {
+        if isInternetAvailable() {
         let url = "https://shielded-chamber-25933.herokuapp.com/practices/"
         let urlEndpoint = URL(string: url + id + "/contain")!
         let dataTask = URLSession.shared.dataTask(with: urlEndpoint) { data, response, error in
@@ -81,6 +84,11 @@ class DetailPractice: UITableViewController {
             }
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -140,6 +148,7 @@ class DetailPractice: UITableViewController {
     }
     
     private func deleteExercise( exerciseId: String) {
+        if isInternetAvailable() {
          let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         var params = ["delete" : exerciseId ]
         let url = "https://shielded-chamber-25933.herokuapp.com/practices/"
@@ -159,6 +168,11 @@ class DetailPractice: UITableViewController {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request)
         task.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     @objc func connectPracticeWithExercSearch(notification: Notification) {
         
@@ -197,7 +211,7 @@ class DetailPractice: UITableViewController {
                     if let error = json["error"], let reason = json["reason"]  {
                         if error as! Bool == true && reason as! String == "no such uid"{
                         DispatchQueue.main.async {
-                            self.DisplayWarnining(warning: "Try again, please", title: "Application Error", dismissing: false)
+                            DisplayWarnining(warning: "Try again, please", title: "Application Error", dismissing: false, sender: self)
                         }
                     }
                 }
@@ -210,7 +224,7 @@ class DetailPractice: UITableViewController {
         })
         task.resume()
     }
-    func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
+  /*  func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
         DispatchQueue.main.async {
             let warningController = UIAlertController(title: title, message: warning, preferredStyle: .alert)
             
@@ -229,7 +243,7 @@ class DetailPractice: UITableViewController {
         
     }
     
-
+*/
 }
 extension Notification.Name {
     static let reloadListExr = Notification.Name("reloadListExr")

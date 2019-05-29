@@ -11,7 +11,7 @@ import UIKit
 
 class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate  {
     
-  
+    
     
     var resultSearch = UISearchController(searchResultsController: nil)
    
@@ -60,7 +60,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         
     }
     @objc func refresh(){
-        NotificationCenter.default.post(name: .reloadListExr, object: nil)
+        NotificationCenter.default.post(name: .reloadExrBase, object: nil)
         tableView.reloadData()
         refreshControl?.endRefreshing()
     }
@@ -126,6 +126,7 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
         
     }
     private func requestExercises()  {
+        if isInternetAvailable() {
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/exercises/")!
         let dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
             guard
@@ -142,6 +143,11 @@ class AllExerciseControler: UITableViewController, UISearchResultsUpdating, UISe
             }
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

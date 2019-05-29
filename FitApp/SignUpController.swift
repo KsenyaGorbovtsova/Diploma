@@ -41,12 +41,12 @@ class SignUp: UIViewController {
     @IBAction func signUpButton(_ sender: Any) {
         if (self.firstNameTextField.text?.isEmpty)! || (self.secondNameTextField.text?.isEmpty)! || (self.emailTextField.text?.isEmpty)! || (self.pswdTextField.text?.isEmpty)!
         {
-            self.DisplayWarnining(warning: "Fill in all the fields", title: "Warning", dismissing: false)
+            DisplayWarnining(warning: "Fill in all the fields", title: "Warning", dismissing: false, sender: self)
             return
         }
         if (self.pswdTextField.text?.elementsEqual(self.confirmPswdTextField.text!))! != true
         {
-            self.DisplayWarnining(warning: "Passwords are not equal", title: "Warning", dismissing: false)
+            DisplayWarnining(warning: "Passwords are not equal", title: "Warning", dismissing: false, sender: self)
             self.confirmPswdTextField.text = ""
             self.pswdTextField.text = ""
             return
@@ -70,7 +70,7 @@ class SignUp: UIViewController {
         }
     }
     
-    func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
+  /*  func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
         DispatchQueue.main.async {
             let warningController = UIAlertController(title: title, message: warning, preferredStyle: .alert)
             
@@ -88,13 +88,14 @@ class SignUp: UIViewController {
         }
         
     }
-    
+    */
     private func prepareUser (firstName: String, secondName: String, email: String, password: String) -> User {
         let newUser = User(email: email, password: password, firstName: firstName, secondName: secondName)
         return newUser
     }
     
     private func postNewUser(user: User) {
+        if isInternetAvailable() {
         let params = ["firstName": user.firstName, "secondName": user.secondName, "email": user.email, "password": user.password]
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/users")
         var request = URLRequest(url: url!)
@@ -102,7 +103,7 @@ class SignUp: UIViewController {
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
         } catch let error {
-            self.DisplayWarnining(warning: "Ooops! Error on our side. Try again, please :)", title: "Warning", dismissing: false)
+            DisplayWarnining(warning: "Ooops! Error on our side. Try again, please :)", title: "Warning", dismissing: false, sender: self)
             print (error.localizedDescription)
         }
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
@@ -122,24 +123,30 @@ class SignUp: UIViewController {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     if let error = json["error"] {
                     if error as! Bool == true {
-                        self.DisplayWarnining(warning: "User already exist", title: "Warning", dismissing: false )
+                        DisplayWarnining(warning: "User already exist", title: "Warning", dismissing: false, sender: self )
                         self.emailTextField.text = ""
                         self.confirmPswdTextField.text = ""
                         self.pswdTextField.text = ""
                         }
                     }
                     else {
-                        self.DisplayWarnining(warning: "Successful registration", title: "Congrats" + "🎉", dismissing: true)
+                        DisplayWarnining(warning: "Successful registration", title: "Congrats" + "🎉", dismissing: true, sender: self)
                     }
                 }
                 
             } catch let error {
-                self.DisplayWarnining(warning: "Try again, please", title: "Warning", dismissing: false)
+                DisplayWarnining(warning: "Try again, please", title: "Warning", dismissing: false, sender: self)
                 print(error.localizedDescription)
             }
         })
         
         task.resume()
     }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
+    }
+    
     
 }

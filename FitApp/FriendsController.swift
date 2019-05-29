@@ -84,6 +84,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
         self.navigationController?.popViewController(animated: true)
     }
     private func requestFriends() {
+        if isInternetAvailable() {
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/users/" + userid! + "/friends")!
@@ -111,6 +112,11 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             }
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     private func parseFriend(data: Data) -> [User] {
         var image = Data()
@@ -347,6 +353,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     }
    
     func addOrDeleteFriendToUser (idFriend: String, action: String) {
+        if isInternetAvailable() {
         var endPoint = ""
         var params = [String : Any]()
         var httpMethod = ""
@@ -381,6 +388,11 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
        request.addValue("application/json", forHTTPHeaderField: "Accept")
         let task = URLSession.shared.dataTask(with: request as URLRequest)
         task.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
         
     }
     func updateSearchResults(for searchController: UISearchController) {
@@ -388,6 +400,7 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
     }
     var filteredData = [User]()
     func filterForSearch ( _ searchText: String, scope: String = "ALL") {
+        if isInternetAvailable() {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         if searchText == nil || searchText.latinCharactersOnly == false {
             return
@@ -418,7 +431,12 @@ class Friends: UITableViewController, UISearchResultsUpdating, UISearchBarDelega
             }
         }
         dataTask.resume()
+        }
         //self.tableView.reloadData()
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     func SearchBarIsEmpty() -> Bool {

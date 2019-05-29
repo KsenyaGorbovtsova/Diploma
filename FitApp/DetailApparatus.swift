@@ -36,6 +36,7 @@ class DetailApparatus: UIViewController {
         if self.flagShow == true {
             self.hideKeyboardWhenTappedAround() 
             self.title = self.name
+            adjustLargeTitleSize()
             self.addImageButton.isHidden = true
             self.nameTextLabel.isHidden = true
             self.nameTitle.isHidden = true
@@ -83,6 +84,7 @@ class DetailApparatus: UIViewController {
         }
     }
     private func postApparatus() {
+        if isInternetAvailable() {
         var params = [String:Any]()
         if let newName = self.nameTextLabel.text {
             params["name"] = newName
@@ -141,6 +143,11 @@ class DetailApparatus: UIViewController {
             
         }
         dataTask.resume()
+        }
+        
+        else {
+            FitApp.DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     func stopSpinner(spinner: UIActivityIndicatorView) {

@@ -18,7 +18,7 @@ class SignIn: UIViewController {
     let spinner = UIActivityIndicatorView(style: .gray)
     @IBAction func SignIn(_ sender: Any) {
         if (self.emailTextField.text?.isEmpty)! || (self.pswdTextField.text?.isEmpty)! {
-            self.DisplayWarnining(warning: "Fill in all the fields", title: "Warning", dismissing: false)
+            DisplayWarnining(warning: "Fill in all the fields", title: "Warning", dismissing: false, sender: self)
             return
         }
         self.spinner.color = UIColor(red: 0.35, green: 0.34, blue: 0.84, alpha: 1)
@@ -49,6 +49,7 @@ class SignIn: UIViewController {
     }
     
     private func login (email: String, password: String) {
+        if isInternetAvailable() {
         let loginData = String(format: "%@:%@", email, password).data(using: String.Encoding.utf8)!
         let base64 = loginData.base64EncodedString()
 
@@ -70,7 +71,7 @@ class SignIn: UIViewController {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     if let error = json["error"], let reason = json["reason"]  {
                         if error as! Bool == true && reason as! String == "User not authenticated."{
-                        self.DisplayWarnining(warning: "Wrong email or password", title: "Warning", dismissing: false )
+                           DisplayWarnining(warning: "Не верный адрес или пароль", title: "Warning", dismissing: false, sender: self)
                             DispatchQueue.main.async {
                                 self.pswdTextField.text = ""
                             }
@@ -85,7 +86,7 @@ class SignIn: UIViewController {
                         let saveUserId: Bool = KeychainWrapper.standard.set(json["userId"] as! String, forKey: "userId")
                         
                         if (saveAccessToken == false || saveUserId == false) {
-                            self.DisplayWarnining(warning: "Error, please try again", title: "Warning", dismissing: false )
+                            DisplayWarnining(warning: "Error, please try again", title: "Warning", dismissing: false, sender: self)
                             self.pswdTextField.text = ""
                             return
                         }
@@ -104,6 +105,12 @@ class SignIn: UIViewController {
             }
         })
         task.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+            self.stopSpinner(spinner: spinner)
+        }
         
     }
     
@@ -114,7 +121,7 @@ class SignIn: UIViewController {
         }
     }
     
-    func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
+  /*  func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
         DispatchQueue.main.async {
             let warningController = UIAlertController(title: title, message: warning, preferredStyle: .alert)
             
@@ -131,5 +138,5 @@ class SignIn: UIViewController {
             self.present(warningController, animated: true, completion: nil)
         }
         
-    }
+    }*/
 }

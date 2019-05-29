@@ -79,7 +79,7 @@ class  ListMeasurements: UITableViewController {
     }*/
   
     private func requestMeasurements() {
-        
+        if isInternetAvailable() {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/measureunits")!
         var request = URLRequest(url: url)
@@ -106,6 +106,11 @@ class  ListMeasurements: UITableViewController {
             }
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     private func parseMeasurements(data: Data) -> [measurement] {

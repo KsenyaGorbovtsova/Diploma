@@ -57,6 +57,7 @@ class  DetailMeasurement: UIViewController {
         }
     }
     private func postMent() {
+        if isInternetAvailable() {
         var params = [String:Any]()
         if let newName = self.nameTextLabel.text {
             params["name"] = newName
@@ -108,6 +109,11 @@ class  DetailMeasurement: UIViewController {
             
         }
         dataTask.resume()
+        }
+        
+        else {
+            FitApp.DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {

@@ -135,6 +135,7 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
  
 
      private func requestTodayPlan() {
+        if isInternetAvailable() {
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
        
@@ -164,8 +165,11 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
                 print(error.localizedDescription)
             }
         }
-        dataTask.resume()
+            dataTask.resume()}
         
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     private func parsePractices(data: Data) -> [Practice] {
@@ -223,7 +227,7 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
     
     
     public func requestExercise(id: String) {
-        
+        if isInternetAvailable() {
         let url = "https://shielded-chamber-25933.herokuapp.com/practices/"
         let urlEndpoint = URL(string: url + id + "/contain")!
         let dataTask = URLSession.shared.dataTask(with: urlEndpoint) { data, response, error in
@@ -241,6 +245,11 @@ class todayController: UIViewController, UITableViewDataSource, UITableViewDeleg
              }
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
 }
     @objc func reloadToday (notification: Notification) {
         self.practicesToday.removeAll()

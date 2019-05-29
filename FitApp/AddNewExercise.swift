@@ -108,6 +108,7 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         return newExercisice
     }
     private func postExercise(exercise: Exercise) {
+        if isInternetAvailable() {
         let params = ["measure_unitId":exercise.measureUnitId, "num_measure" : exercise.num_measure, "num_rep": exercise.num_rep, "num_try" : exercise.num_try, "apparatusId" : exercise.apparatusId, "status" : exercise.status, "name" : exercise.name] as [String : Any]
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/exercises")
         var request = URLRequest(url: url!)
@@ -150,10 +151,16 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             }
         })
         task.resume()
+        }
+        
+        else {
+            FitApp.DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
         
     }
     
     private func connectPracticeExercise(practiceId: String, exerciseId:String) {
+        if isInternetAvailable() {
         let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/practices/" + practiceId + "/addExercise")
         let params = ["contain" : exerciseId]
         var request = URLRequest(url: url!)
@@ -188,6 +195,11 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             
         })
         task.resume()
+        }
+        
+        else {
+            FitApp.DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -208,6 +220,7 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
     }
     private func deleteExerciseFromPractice(practiceId: String, exerciseId: String) {
+        if isInternetAvailable() {
         //let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/practices/\(self.practiceid)/deleteExercise")
         let params = ["delete" : self.idOfEditedExercise]
@@ -223,6 +236,11 @@ class AddNewExercise: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         //request.addValue("Bearer \(String(describing: accessToken))", forHTTPHeaderField: "Authorization")
         let task = URLSession.shared.dataTask(with: request)
         task.resume()
+        }
+        
+        else {
+            FitApp.DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     @objc func switchIsChanged(_: UISwitch) {
         if self.switchEdit.isOn {

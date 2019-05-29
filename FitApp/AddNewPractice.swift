@@ -34,6 +34,7 @@ class AddNewPractice: UIViewController {
     @IBOutlet weak var addPractToSelf: UISwitch!
     
     @IBAction func savePractice(_ sender: UIButton) {
+        if isInternetAvailable() {
         self.spinner.color = UIColor.init(displayP3Red: 0.35, green:0.34, blue:0.84, alpha:1)
         self.spinner.center = view.center
         self.spinner.hidesWhenStopped = false
@@ -60,7 +61,7 @@ class AddNewPractice: UIViewController {
             }
         }
         if self.PracticeNameTextField.text == "" {
-            self.DisplayWarnining(warning: "Дайте название тренировке", title: "Упс!", dismissing: false)
+            DisplayWarnining(warning: "Дайте название тренировке", title: "Упс!", dismissing: false, sender:self)
             return
         } else {
             params["name"] = self.PracticeNameTextField.text!
@@ -92,13 +93,13 @@ class AddNewPractice: UIViewController {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data) as? [String:Any] {
                     if json.keys.contains("error") {
-                        self.DisplayWarnining(warning: "Попробуйте снова", title: "Что-то пошло не так", dismissing: false)
+                        DisplayWarnining(warning: "Попробуйте снова", title: "Что-то пошло не так", dismissing: false, sender: self)
                     } else {
                     self.createdPacticeForUsers = json["id"] as! String
                     self.addExrToPractice(idPractice: self.createdPacticeForUsers, idsExr: self.chosenExercises)
                     self.addPracticeToUsers(idPractice: self.createdPacticeForUsers, idsUsers: self.selectedFriends)
                          NotificationCenter.default.post(name: .reloadPracticeList, object: nil)
-                    self.DisplayWarnining(warning: "Пользователи получили тренировки", title: "Тренировка добавлена", dismissing: true)
+                        DisplayWarnining(warning: "Пользователи получили тренировки", title: "Тренировка добавлена", dismissing: true, sender: self)
                    
                     }
                 }
@@ -108,9 +109,15 @@ class AddNewPractice: UIViewController {
             }
         })
        dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     private func addExrToPractice (idPractice: String, idsExr: [String]) {
+        if isInternetAvailable() {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         var params = [String:Any]()
         for x in idsExr {
@@ -140,7 +147,7 @@ class AddNewPractice: UIViewController {
                 do {
                     if let json =  try JSONSerialization.jsonObject(with: data) as? [String:Any] {
                         if json.keys.contains("error") {
-                            self.DisplayWarnining(warning: "Попробуйте снова", title: "Что-то пошло не так", dismissing: false)
+                            DisplayWarnining(warning: "Попробуйте снова", title: "Что-то пошло не так", dismissing: false, sender: self)
                         }
                     }
                 }
@@ -149,11 +156,15 @@ class AddNewPractice: UIViewController {
                 }
             })
             dataTask.resume()
-            
         }
+        }
+            else {
+                DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+            }
     }
     
     public func addPracticeToUsers (idPractice: String, idsUsers: [String:String]) {
+        if isInternetAvailable() {
         let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         var params = [String:Any] ()
@@ -189,7 +200,7 @@ class AddNewPractice: UIViewController {
                 do {
                     if let json =  try JSONSerialization.jsonObject(with: data) as? [String:Any] {
                         if json.keys.contains("error") {
-                            self.DisplayWarnining(warning: "Попробуйте снова", title: "Что-то пошло не так", dismissing: false)
+                            DisplayWarnining(warning: "Попробуйте снова", title: "Что-то пошло не так", dismissing: false, sender: self)
                         }
                     }
                 }
@@ -198,6 +209,11 @@ class AddNewPractice: UIViewController {
                 }
             })
             dataTask.resume()
+        }
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
         }
     }
     
@@ -299,7 +315,7 @@ class AddNewPractice: UIViewController {
         
     }
     
-    func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
+    /*func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
         DispatchQueue.main.async {
             let warningController = UIAlertController(title: title, message: warning, preferredStyle: .alert)
             
@@ -317,7 +333,7 @@ class AddNewPractice: UIViewController {
             self.present(warningController, animated: true, completion: nil)
         }
         
-    }
+    }*/
    
     
 }

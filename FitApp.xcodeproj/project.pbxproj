@@ -23,6 +23,7 @@
 		9E59224E224FA957006A5D37 /* Pods_FitApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4A41D44570DA147CD2EB5AF /* Pods_FitApp.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9E698566222D6C730004A54A /* AddNewExercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E698565222D6C730004A54A /* AddNewExercise.swift */; };
 		9E7A5A7C226E363100303E06 /* photoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7A5A7B226E363100303E06 /* photoPicker.swift */; };
+		9E991661229E6BB00098B5E3 /* funcs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E991660229E6BB00098B5E3 /* funcs.swift */; };
 		9EB0B84322240D04008BF8EF /* DetailPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB0B84222240D04008BF8EF /* DetailPractice.swift */; };
 		9EB0B84522240DD2008BF8EF /* ListPractice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB0B84422240DD2008BF8EF /* ListPractice.swift */; };
 		9EB0B84722240EB3008BF8EF /* Practice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB0B84622240EB3008BF8EF /* Practice.swift */; };
@@ -56,6 +57,7 @@
 		9E56276C2237A52C00AE566A /* AllExerciseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExerciseController.swift; sourceTree = "<group>"; };
 		9E698565222D6C730004A54A /* AddNewExercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewExercise.swift; sourceTree = "<group>"; };
 		9E7A5A7B226E363100303E06 /* photoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = photoPicker.swift; sourceTree = "<group>"; };
+		9E991660229E6BB00098B5E3 /* funcs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = funcs.swift; sourceTree = "<group>"; };
 		9EB0B84222240D04008BF8EF /* DetailPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPractice.swift; sourceTree = "<group>"; };
 		9EB0B84422240DD2008BF8EF /* ListPractice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPractice.swift; sourceTree = "<group>"; };
 		9EB0B84622240EB3008BF8EF /* Practice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Practice.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				9EF418412286167A006EEAF7 /* TodayController.swift */,
 				9E2BEFB1227736C900F4C8DA /* ListApparartus.swift */,
 				9EEE06D4227E12C3005F3020 /* gradientLayer.swift */,
+				9E991660229E6BB00098B5E3 /* funcs.swift */,
 				9EEE06D6227E195D005F3020 /* LaunchScreen.swift */,
 				9E132A00227B9260006829EB /* ListMeasurements.swift */,
 				9E132A02227B95A5006829EB /* DetailMeasurement.swift */,
@@ -296,6 +299,7 @@
 				9E1614BE22311A14002E167C /* AddNewPractice.swift in Sources */,
 				9E7A5A7C226E363100303E06 /* photoPicker.swift in Sources */,
 				9E698566222D6C730004A54A /* AddNewExercise.swift in Sources */,
+				9E991661229E6BB00098B5E3 /* funcs.swift in Sources */,
 				9EF758A5217E1C670033ACC1 /* AppDelegate.swift in Sources */,
 				9E2BEFB2227736C900F4C8DA /* ListApparartus.swift in Sources */,
 				9E2BEFB42277684400F4C8DA /* DetailApparatus.swift in Sources */,

@@ -80,7 +80,7 @@ class ListApparatus: UITableViewController {
     }
     
     private func requestApparatuses() {
-       
+        if isInternetAvailable() {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/apparatuses")!
         var request = URLRequest(url: url)
@@ -106,6 +106,11 @@ class ListApparatus: UITableViewController {
             }
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     private func parseApparatus(data: Data) -> [apparatus]{

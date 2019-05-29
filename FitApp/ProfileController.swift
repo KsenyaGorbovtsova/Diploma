@@ -161,6 +161,7 @@ class ProfileController: UIViewController {
     }
    
     @IBAction func signOut(_ sender: UIButton) {
+        if isInternetAvailable() {
         let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let url = URL(string:"https://shielded-chamber-25933.herokuapp.com/users/" + userId! + "/logout")!
@@ -179,6 +180,11 @@ class ProfileController: UIViewController {
         let signInPage = self.storyboard?.instantiateViewController(withIdentifier: "signInNav") as! UINavigationController
         let appDelegate = UIApplication.shared.delegate
         appDelegate?.window??.rootViewController = signInPage
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     @IBAction func addOrDeleteButtom(_ sender: UIButton) {
@@ -242,6 +248,7 @@ class ProfileController: UIViewController {
     @IBOutlet weak var doneButton: UIButton!
     
     private func updateUserInformation() {
+        if isInternetAvailable() {
         var params = [String:Any]()
         if self.firstNameTextField.text != self.userData.firstName {
             params["firstName"] = self.firstNameTextField.text
@@ -256,7 +263,7 @@ class ProfileController: UIViewController {
             params["password"] = self.pswdTextField.text
         }
         else if self.confirmpswdTextField.text != self.pswdTextField.text {
-            self.DisplayWarnining(warning: "Проверьте правильность ввода паролей", title: "Ooops", dismissing: false)
+            DisplayWarnining(warning: "Проверьте правильность ввода паролей", title: "Ooops", dismissing: false, sender: self)
             self.confirmpswdTextField.text = ""
             self.pswdTextField.text = ""
         }
@@ -298,11 +305,16 @@ class ProfileController: UIViewController {
             guard let data = data else {
                 return
             }
-            self.DisplayWarnining(warning: "Изменения сохранены", title: "Congrats" + "🎉", dismissing: true)
+            DisplayWarnining(warning: "Изменения сохранены", title: "Congrats" + "🎉", dismissing: true, sender: self)
            NotificationCenter.default.post(name: .updateInfo, object: nil)
             
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     func stopSpinner(spinner: UIActivityIndicatorView) {
         DispatchQueue.main.async {
@@ -310,7 +322,7 @@ class ProfileController: UIViewController {
             spinner.removeFromSuperview()
         }
     }
-    func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
+   /* func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
         DispatchQueue.main.async {
             let warningController = UIAlertController(title: title, message: warning, preferredStyle: .alert)
             
@@ -327,9 +339,10 @@ class ProfileController: UIViewController {
             self.present(warningController, animated: true, completion: nil)
         }
         
-    }
+    }*/
     
     func addOrDeleteFriendToUser (idFriend: String, action: String) {
+        if isInternetAvailable() {
         var endPoint = ""
         var params = [String : Any]()
         var httpMethod = ""
@@ -364,8 +377,14 @@ class ProfileController: UIViewController {
         let task = URLSession.shared.dataTask(with: request as URLRequest)
         task.resume()
         NotificationCenter.default.post(name: .reloadListFriend, object: nil)
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     private func requestUserData(){
+        if isInternetAvailable() {
         let userId: String? = KeychainWrapper.standard.string(forKey: "userId")
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/users/" + userId!)!
@@ -389,6 +408,11 @@ class ProfileController: UIViewController {
            
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     private func parseUser(data: Data)  {

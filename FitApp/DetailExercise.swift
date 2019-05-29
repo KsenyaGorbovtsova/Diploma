@@ -52,6 +52,8 @@ class DetailExercise: UIViewController {
         self.requestApparatus(apparatusId: self.exercise.apparatusId)
         self.requestMeasurement(measurementId: self.exercise.measureUnitId)
         self.title = self.exercise.name
+        adjustLargeTitleSize()
+
         if self.flagBar == true {
             self.navigationItem.rightBarButtonItem = nil
             self.nameExercise.isHidden = true/////убрать
@@ -83,6 +85,7 @@ class DetailExercise: UIViewController {
         
     }
     private func requestMeasurement(measurementId: String) {
+        if isInternetAvailable(){
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/measureunits/" + measurementId)!
         var request = URLRequest(url: url)
@@ -117,9 +120,14 @@ class DetailExercise: UIViewController {
             }
         }
         dataTask.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     private func requestApparatus(apparatusId: String) {
-       // var newApparatus = Apparatus.self
+        if isInternetAvailable() {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let url = URL(string: "https://shielded-chamber-25933.herokuapp.com/apparatuses/" + apparatusId )!
         var request = URLRequest(url: url)
@@ -161,7 +169,11 @@ class DetailExercise: UIViewController {
             
         }
         dataTask.resume()
-    
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
         
     }
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
@@ -201,4 +213,22 @@ class DetailExercise: UIViewController {
 extension Notification.Name {
     static let reloadAppararus = Notification.Name("reloadApparatus")
     static let reloadMeasure = Notification.Name("reloadMeasure")
+}
+extension UIViewController {
+    func adjustLargeTitleSize() {
+        guard let title = title, #available(iOS 11.0, *) else { return }
+        
+        let maxWidth = UIScreen.main.bounds.size.width - 60
+        var fontSize = UIFont.preferredFont(forTextStyle: .largeTitle).pointSize
+        var width = title.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize)]).width
+        
+        while width > maxWidth {
+            fontSize -= 1
+            width = title.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize)]).width
+        }
+        
+        navigationController?.navigationBar.largeTitleTextAttributes =
+            [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: fontSize)
+        ]
+    }
 }

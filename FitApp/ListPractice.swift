@@ -51,15 +51,7 @@ class ListPractice: UITableViewController  {
         }
         
     }
-  /*  override func viewDidLoad() {
-        super.viewDidLoad()
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-        requestPractice()
-        
-    }
  
-    */
     struct Objects : Hashable {
         var sectionName: String
         var sectionObjects = [Practice] ()
@@ -129,6 +121,8 @@ class ListPractice: UITableViewController  {
     }
     
     private func requestPractice(){
+        if isInternetAvailable()
+        {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         print(accessToken)
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
@@ -177,7 +171,10 @@ class ListPractice: UITableViewController  {
         }
             
     }
-    dataTask.resume()
+            dataTask.resume()}
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
     
     
@@ -210,6 +207,8 @@ class ListPractice: UITableViewController  {
     }
     
     private func deletePractice(id:String) {
+        if isInternetAvailable()
+        {
         let accessToken: String? = KeychainWrapper.standard.string(forKey: "accessToken")
         let userid: String? = KeychainWrapper.standard.string(forKey: "userId")
          let params = ["delete" : id]
@@ -233,6 +232,11 @@ class ListPractice: UITableViewController  {
         }
         let task = URLSession.shared.dataTask(with: request)
         task.resume()
+        }
+        
+        else {
+            DisplayWarnining(warning: "проверьте подключение к интернету", title: "Упс!", dismissing: false, sender: self)
+        }
     }
 
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -277,7 +281,7 @@ class ListPractice: UITableViewController  {
        
     }
 
-    func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
+  /*  func DisplayWarnining (warning: String, title: String, dismissing: Bool) -> Void {
         DispatchQueue.main.async {
             let warningController = UIAlertController(title: title, message: warning, preferredStyle: .alert)
             
@@ -293,7 +297,7 @@ class ListPractice: UITableViewController  {
             warningController.addAction(buttonAction)
             self.present(warningController, animated: true, completion: nil)
         }
-    }
+    }*/
     
     
     @objc func reloadPracticeList (notification: Notification) {
